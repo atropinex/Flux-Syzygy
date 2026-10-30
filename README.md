@@ -2,7 +2,6 @@
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
-[![Issues](https://img.shields.io/github/issues/atropinex/syzygy)](https://github.com/atropinex/syzygy/issues)
 
 **Syzygy** is a lightweight developer cockpit and workspace launcher. It aggregates scattered projects across local drives—game engines (Unreal, Unity, Cocos, Godot), monorepos, and standalone scripts—into a unified dashboard. Inspect remote upstream connectivity at a glance and fire code directly into its designated IDE with one click.
 
