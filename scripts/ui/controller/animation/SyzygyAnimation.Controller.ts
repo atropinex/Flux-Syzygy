@@ -1,4 +1,4 @@
-import { isMotionEnabled, motionScale } from "../theme/SyzygyTheme.Controller";
+import {isMotionEnabled, motionScale} from "../theme/SyzygyTheme.Controller";
 
 const EASING = "cubic-bezier(0.22, 1, 0.36, 1)";
 const COLLAPSE_MS = 320;
@@ -26,9 +26,9 @@ export async function setShown(element: HTMLElement, shown: boolean, animate: bo
 
     element.hidden = false;
     const height = element.offsetHeight;
-    const { marginTop, marginBottom } = getComputedStyle(element);
-    const open = { height: `${height}px`, opacity: 1, marginTop, marginBottom };
-    const closed = { height: "0px", opacity: 0, marginTop: "0px", marginBottom: "0px" };
+    const {marginTop, marginBottom} = getComputedStyle(element);
+    const open = {height: `${height}px`, opacity: 1, marginTop, marginBottom};
+    const closed = {height: "0px", opacity: 0, marginTop: "0px", marginBottom: "0px"};
 
     element.style.clipPath = "inset(0 -80px)";
     const animation = element.animate(shown ? [closed, open] : [open, closed], {
@@ -54,8 +54,8 @@ export async function animateRemoval(element: HTMLElement): Promise<void> {
     element.style.clipPath = "inset(0 -80px)";
 
     const animation = element.animate(
-        [{ height: `${height}px`, opacity: 1 }, { height: "0px", opacity: 0, marginTop: "0px", marginBottom: "0px" }],
-        { duration: COLLAPSE_MS * motionScale(), easing: EASING, fill: "forwards" }
+        [{height: `${height}px`, opacity: 1}, {height: "0px", opacity: 0, marginTop: "0px", marginBottom: "0px"}],
+        {duration: COLLAPSE_MS * motionScale(), easing: EASING, fill: "forwards"}
     );
     await animation.finished.catch(() => undefined);
 }
@@ -83,7 +83,10 @@ export function playFlip(): void {
         if (oldTop === undefined) continue; // a new row
         const shift = oldTop - row.getBoundingClientRect().top;
         if (Math.abs(shift) > 1) {
-            row.animate([{ translate: `0 ${shift}px` }, { translate: "0 0" }], { duration: FLIP_MS * motionScale(), easing: EASING });
+            row.animate([{translate: `0 ${shift}px`}, {translate: "0 0"}], {
+                duration: FLIP_MS * motionScale(),
+                easing: EASING
+            });
         }
     }
 }
@@ -139,7 +142,7 @@ export function keepCurveUpdating(ms: number): void {
 export function attachList(list: HTMLElement): () => void {
     listElement = list;
     const onChange = () => requestCurve();
-    list.addEventListener("scroll", onChange, { passive: true });
+    list.addEventListener("scroll", onChange, {passive: true});
     window.addEventListener("resize", onChange);
     keepCurveUpdating(600);
 

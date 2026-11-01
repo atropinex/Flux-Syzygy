@@ -1,6 +1,6 @@
-import type { Settings, StoredSettings } from "../CommonInterface";
-import { DEFAULT_SHORTCUT, DEFAULT_THEME_ID } from "../projects/SyzygyConfig";
-import { StoreModel } from "./StoreModel";
+import type {Settings, StoredSettings} from "../CommonInterface";
+import {DEFAULT_SHORTCUT, DEFAULT_THEME_ID} from "../projects/SyzygyConfig";
+import {StoreModel} from "./StoreModel";
 
 const DEFAULTS: StoredSettings = {
     themeId: DEFAULT_THEME_ID,
@@ -14,7 +14,7 @@ const DEFAULTS: StoredSettings = {
 };
 
 const parseSettings = (raw: unknown): StoredSettings =>
-    ({ ...DEFAULTS, ...(raw && typeof raw === "object" && !Array.isArray(raw) ? raw : {}) });
+    ({...DEFAULTS, ...(raw && typeof raw === "object" && !Array.isArray(raw) ? raw : {})});
 
 /** The app's settings, saved on this computer. Groups and the IDEs the user added are kept here too. */
 export class SettingsModel {
@@ -29,12 +29,12 @@ export class SettingsModel {
     }
 
     patch(changes: Partial<StoredSettings>): Promise<void> {
-        return this.update((settings) => ({ ...settings, ...changes }));
+        return this.update((settings) => ({...settings, ...changes}));
     }
 
     /** Only what the page is allowed to see. */
     async toPublic(): Promise<Settings> {
-        const { themeId, windowStyle, panelSide, shortcut, hideOnBlur, hideAfterOpen } = await this.read();
-        return { themeId, windowStyle, panelSide, shortcut, hideOnBlur, hideAfterOpen };
+        const {themeId, windowStyle, panelSide, shortcut, hideOnBlur, hideAfterOpen} = await this.read();
+        return {themeId, windowStyle, panelSide, shortcut, hideOnBlur, hideAfterOpen};
     }
 }

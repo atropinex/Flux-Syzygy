@@ -1,25 +1,41 @@
 /* One row of the list: a project card or a group header. The curve (SyzygyAnimation.Controller)
    moves it with `transform`; the entrance and the panel use `translate`, so they never fight. */
-.row { margin-bottom: 8px; will-change: transform; }
+.row {
+    margin-bottom: 8px;
+    will-change: transform;
+}
 
 .enter {
     animation: row-in var(--t-med) var(--ease-out) both;
     animation-delay: calc(var(--i, 0) * 45ms * var(--motion));
 }
-@keyframes row-in { from { opacity: 0; translate: 0 14px; } }
+
+@keyframes row-in {
+    from {
+        opacity: 0;
+        translate: 0 14px;
+    }
+}
 
 /* Group headers sit a little apart from the rows above them. */
-.group { margin-top: 14px; margin-bottom: 6px; }
+.group {
+    margin-top: 14px;
+    margin-bottom: 6px;
+}
 
 /* === Panel mode: rows follow the panel, one after another (--i is set by SyzygyPanel.Controller) === */
 :global(html[data-mode="panel"]) .row {
-    transition:
-        translate var(--t-med) var(--ease-out) calc(var(--motion) * (90ms + var(--i, 0) * 38ms)),
-        opacity var(--t-med) var(--ease-soft) calc(var(--motion) * (90ms + var(--i, 0) * 38ms));
+    transition: translate var(--t-med) var(--ease-out) calc(var(--motion) * (90ms + var(--i, 0) * 38ms)),
+    opacity var(--t-med) var(--ease-soft) calc(var(--motion) * (90ms + var(--i, 0) * 38ms));
 }
+
 :global(html[data-mode="panel"][data-closed]) .row {
-    translate: -64px 0; opacity: 0;
+    translate: -64px 0;
+    opacity: 0;
     transition-duration: calc(0.3s * var(--motion));
     transition-delay: calc(var(--i, 0) * 14ms * var(--motion));
 }
-:global(html[data-mode="panel"][data-side="right"][data-closed]) .row { translate: 64px 0; }
+
+:global(html[data-mode="panel"][data-side="right"][data-closed]) .row {
+    translate: 64px 0;
+}

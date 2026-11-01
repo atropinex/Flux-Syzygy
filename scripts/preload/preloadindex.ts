@@ -1,7 +1,7 @@
-import { contextBridge, ipcRenderer, type IpcRendererEvent } from "electron";
-import type { ElectronApi } from "../common/CommonInterface";
-import { SyzygyIPC } from "../common/projects/SyzygyConnection";
-import type { PanelEvent } from "../common/projects/SyzygyContract";
+import {contextBridge, ipcRenderer, type IpcRendererEvent} from "electron";
+import type {ElectronApi} from "../common/CommonInterface";
+import {SyzygyIPC} from "../common/projects/SyzygyConnection";
+import type {PanelEvent} from "../common/projects/SyzygyContract";
 
 /** The only door between the page and the main process. */
 const api: ElectronApi = {

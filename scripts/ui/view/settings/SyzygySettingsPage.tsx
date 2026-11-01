@@ -1,6 +1,6 @@
-import { useEffect, useRef } from "react";
-import { closeSettings, useSettingsOpen } from "../../controller/settings/SyzygySettings.Controller";
-import { cx } from "../../../common/utils/ClassHelper";
+import {useEffect, useRef} from "react";
+import {closeSettings, useSettingsOpen} from "../../controller/settings/SyzygySettings.Controller";
+import {cx} from "../../../common/utils/ClassHelper";
 import controls from "../shared/SyzygyControls.module.css";
 import SyzygyEngineSection from "./SyzygyEngineSection";
 import SyzygyIdeSection from "./SyzygyIdeSection";
@@ -29,7 +29,7 @@ export default function SyzygySettingsPage() {
 
     return (
         <div className={styles.drawerHost}>
-            <div className={cx(styles.scrim, open && styles.scrimOpen)} onClick={closeSettings} />
+            <div className={cx(styles.scrim, open && styles.scrimOpen)} onClick={closeSettings}/>
 
             <aside ref={drawerRef} className={cx(styles.settings, open && styles.settingsOpen)} aria-label="Settings">
                 <div className={styles.settingsHead}>
@@ -38,10 +38,10 @@ export default function SyzygySettingsPage() {
                 </div>
 
                 <div className={styles.settingsBody}>
-                    <SyzygyThemeSection />
-                    <SyzygyWindowSection />
-                    <SyzygyEngineSection />
-                    <SyzygyIdeSection />
+                    <SyzygyThemeSection/>
+                    <SyzygyWindowSection/>
+                    <SyzygyEngineSection/>
+                    <SyzygyIdeSection/>
                 </div>
             </aside>
         </div>

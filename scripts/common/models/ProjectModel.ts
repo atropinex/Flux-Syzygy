@@ -1,7 +1,7 @@
-import { randomUUID } from "crypto";
-import type { StoredProject } from "../CommonInterface";
-import type { IdeId } from "../projects/SyzygyContract";
-import { StoreModel } from "./StoreModel";
+import {randomUUID} from "crypto";
+import type {StoredProject} from "../CommonInterface";
+import type {IdeId} from "../projects/SyzygyContract";
+import {StoreModel} from "./StoreModel";
 
 const isCustomId = (id: unknown): id is IdeId => typeof id === "string" && id.startsWith("custom-");
 const isEngineId = (id: unknown): id is IdeId => typeof id === "string" && id.startsWith("engine:");
@@ -41,7 +41,7 @@ export class ProjectModel {
                 result.project = existing;
                 return projects;
             }
-            result.project = { id: randomUUID(), path, ide: null, engine: null, groupId: null };
+            result.project = {id: randomUUID(), path, ide: null, engine: null, groupId: null};
             return [...projects, result.project];
         });
         return result.project!;
@@ -52,7 +52,7 @@ export class ProjectModel {
     }
 
     patch(id: string, changes: Partial<Pick<StoredProject, "ide" | "engine" | "groupId">>): Promise<void> {
-        return this.store.update((projects) => projects.map((project) => (project.id === id ? { ...project, ...changes } : project)));
+        return this.store.update((projects) => projects.map((project) => (project.id === id ? {...project, ...changes} : project)));
     }
 
     /** Projects that used this IDE go back to having none chosen. Returns their ids. */
@@ -60,7 +60,7 @@ export class ProjectModel {
         const affected: string[] = [];
         await this.store.update((projects) => {
             affected.push(...projects.filter((project) => project.ide === ide).map((project) => project.id));
-            return projects.map((project) => (project.ide === ide ? { ...project, ide: null } : project));
+            return projects.map((project) => (project.ide === ide ? {...project, ide: null} : project));
         });
         return affected;
     }
@@ -68,6 +68,6 @@ export class ProjectModel {
     /** Projects in this group become ungrouped. */
     clearGroup(groupId: string): Promise<void> {
         return this.store.update((projects) =>
-            projects.map((project) => (project.groupId === groupId ? { ...project, groupId: null } : project)));
+            projects.map((project) => (project.groupId === groupId ? {...project, groupId: null} : project)));
     }
 }

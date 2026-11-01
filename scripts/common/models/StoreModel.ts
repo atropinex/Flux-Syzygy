@@ -1,6 +1,6 @@
-import { app } from "electron";
-import { promises as fs } from "fs";
-import { join } from "path";
+import {app} from "electron";
+import {promises as fs} from "fs";
+import {join} from "path";
 
 /**
  * One JSON file in the app's data folder.
@@ -14,7 +14,8 @@ export class StoreModel<T> {
     private queue: Promise<unknown> = Promise.resolve();
 
     /** `parse` turns whatever is on disk (or `undefined` if there is nothing) into a valid value. */
-    constructor(private readonly fileName: string, private readonly parse: (raw: unknown) => T) {}
+    constructor(private readonly fileName: string, private readonly parse: (raw: unknown) => T) {
+    }
 
     async read(): Promise<T> {
         try {

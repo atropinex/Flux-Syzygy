@@ -1,14 +1,14 @@
-import type { Theme, ThemeList } from "../../../common/CommonInterface";
-import { exclusive } from "../../../common/utils/ExclusiveHelper";
-import { createStore, useStore } from "../store/SyzygyStore.Controller";
-import { showToast } from "../toast/SyzygyToast.Controller";
+import type {Theme, ThemeList} from "../../../common/CommonInterface";
+import {exclusive} from "../../../common/utils/ExclusiveHelper";
+import {createStore, useStore} from "../store/SyzygyStore.Controller";
+import {showToast} from "../toast/SyzygyToast.Controller";
 
 interface ThemeState {
     list: ThemeList;
     themeId: string;
 }
 
-const themeStore = createStore<ThemeState>({ list: { themes: [], problems: [], folder: "" }, themeId: "midnight" });
+const themeStore = createStore<ThemeState>({list: {themes: [], problems: [], folder: ""}, themeId: "midnight"});
 export const useThemes = () => useStore(themeStore);
 
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -23,7 +23,7 @@ export const isMotionEnabled = () => motionScale() > 0;
 export function applyTheme(theme: Theme): void {
     current = theme;
     const root = document.documentElement.style;
-    const { colors } = theme;
+    const {colors} = theme;
 
     root.setProperty("--background", colors.background);
     root.setProperty("--panel", colors.panel);
@@ -36,7 +36,7 @@ export function applyTheme(theme: Theme): void {
     root.setProperty("--motion", String(reducedMotion.matches ? 0 : theme.motion));
     root.colorScheme = theme.mode;
 
-    themeStore.set((state) => ({ ...state, themeId: theme.id }));
+    themeStore.set((state) => ({...state, themeId: theme.id}));
     applyAccent(projectColor);
 }
 
@@ -50,7 +50,7 @@ export function applyAccent(color: string | null): void {
 }
 
 function applyThemeById(id: string): void {
-    const { themes } = themeStore.get().list;
+    const {themes} = themeStore.get().list;
     const theme = themes.find((item) => item.id === id) ?? themes[0];
     if (theme) applyTheme(theme);
 }
@@ -58,7 +58,7 @@ function applyThemeById(id: string): void {
 /** Loads the themes and applies the one that is saved in the settings. */
 export async function initializeTheme(themeId: string): Promise<void> {
     const list = await window.api.listThemes();
-    themeStore.set({ list, themeId });
+    themeStore.set({list, themeId});
     applyThemeById(themeId);
 
     // Animation settings follow the system's "reduce motion" switch while the app is running.
@@ -73,7 +73,7 @@ export const chooseTheme = exclusive(async (id: string): Promise<void> => {
 /** Reads the YAML files again, so edits to a theme show up without restarting. */
 export const reloadThemes = exclusive(async (): Promise<void> => {
     const list = await window.api.listThemes();
-    themeStore.set((state) => ({ ...state, list }));
+    themeStore.set((state) => ({...state, list}));
     applyThemeById(themeStore.get().themeId);
     showToast("Themes reloaded");
 });

@@ -1,7 +1,7 @@
 import {
     useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent
 } from "react";
-import { cx } from "../../../common/utils/ClassHelper";
+import {cx} from "../../../common/utils/ClassHelper";
 import {
     closeContextMenu, useContextMenu, type MenuEntry, type MenuItem
 } from "../../controller/contextmenu/SyzygyContextMenu.Controller";
@@ -32,7 +32,7 @@ export default function SyzygyContextMenu() {
 
     if (!menu.open) return null;
     // The key restarts the menu when it is opened again at another spot.
-    return <MenuList key={`${menu.x}:${menu.y}`} entries={menu.entries} x={menu.x} y={menu.y} />;
+    return <MenuList key={`${menu.x}:${menu.y}`} entries={menu.entries} x={menu.x} y={menu.y}/>;
 }
 
 // === A list of entries (the root menu or a submenu) === //
@@ -46,7 +46,7 @@ interface MenuListProps {
     goBack?: () => void;    // closes a submenu and returns to its parent item
 }
 
-function MenuList({ entries, x = 0, y = 0, isSub = false, focusFirst = false, goBack }: MenuListProps) {
+function MenuList({entries, x = 0, y = 0, isSub = false, focusFirst = false, goBack}: MenuListProps) {
     const ref = useRef<HTMLDivElement>(null);
     const [shown, setShown] = useState(false);
 
@@ -85,9 +85,9 @@ function MenuList({ entries, x = 0, y = 0, isSub = false, focusFirst = false, go
         if (isSub) return;
 
         const previous = document.activeElement;
-        menu.focus({ preventScroll: true });
+        menu.focus({preventScroll: true});
         return () => {
-            if (previous instanceof HTMLElement && previous.isConnected) previous.focus({ preventScroll: true });
+            if (previous instanceof HTMLElement && previous.isConnected) previous.focus({preventScroll: true});
         };
     }, [isSub, focusFirst]);
 
@@ -98,19 +98,33 @@ function MenuList({ entries, x = 0, y = 0, isSub = false, focusFirst = false, go
         const focusAt = (index: number) => items[(index + items.length) % items.length]?.focus();
 
         switch (event.key) {
-            case "ArrowDown": focusAt(current + 1); break;
-            case "ArrowUp": focusAt(current < 0 ? -1 : current - 1); break;
-            case "Home": focusAt(0); break;
-            case "End": focusAt(-1); break;
+            case "ArrowDown":
+                focusAt(current + 1);
+                break;
+            case "ArrowUp":
+                focusAt(current < 0 ? -1 : current - 1);
+                break;
+            case "Home":
+                focusAt(0);
+                break;
+            case "End":
+                focusAt(-1);
+                break;
             case "ArrowRight": {
                 const active = document.activeElement as HTMLElement | null;
                 if (active?.hasAttribute("aria-haspopup")) active.click(); // opens the submenu
                 break;
             }
-            case "ArrowLeft": if (!goBack) return; goBack(); break;
+            case "ArrowLeft":
+                if (!goBack) return;
+                goBack();
+                break;
             case "Escape":
-            case "Tab": closeContextMenu(); break;
-            default: return;
+            case "Tab":
+                closeContextMenu();
+                break;
+            default:
+                return;
         }
         event.preventDefault();
         event.stopPropagation();
@@ -127,15 +141,15 @@ function MenuList({ entries, x = 0, y = 0, isSub = false, focusFirst = false, go
         >
             {entries.map((entry, index) =>
                 entry === "separator"
-                    ? <div key={index} className={styles.menuSep} role="separator" />
-                    : <MenuRow key={`${index}:${entry.label}`} entry={entry} />)}
+                    ? <div key={index} className={styles.menuSep} role="separator"/>
+                    : <MenuRow key={`${index}:${entry.label}`} entry={entry}/>)}
         </div>
     );
 }
 
 // === One item === //
 
-function MenuRow({ entry }: { entry: MenuItem }) {
+function MenuRow({entry}: { entry: MenuItem }) {
     const itemRef = useRef<HTMLButtonElement>(null);
     const timer = useRef<number>();
     const [submenuOpen, setSubmenuOpen] = useState(false);
@@ -168,7 +182,10 @@ function MenuRow({ entry }: { entry: MenuItem }) {
     const hoverIn = () => {
         if (!entry.items) return;
         window.clearTimeout(timer.current);
-        timer.current = window.setTimeout(() => { setFocusSubmenu(false); setSubmenuOpen(true); }, 140);
+        timer.current = window.setTimeout(() => {
+            setFocusSubmenu(false);
+            setSubmenuOpen(true);
+        }, 140);
     };
     const hoverOut = () => {
         if (!entry.items) return;
@@ -189,7 +206,8 @@ function MenuRow({ entry }: { entry: MenuItem }) {
             >
                 <span className={styles.menuCheck}>{entry.checked ? "✓" : ""}</span>
                 <span>{armed ? "Click again to confirm" : entry.label}</span>
-                {entry.items ? <span className={styles.menuArrow} /> : <span className={styles.menuHint}>{entry.hint ?? ""}</span>}
+                {entry.items ? <span className={styles.menuArrow}/> :
+                    <span className={styles.menuHint}>{entry.hint ?? ""}</span>}
             </button>
 
             {submenuOpen && entry.items && (
@@ -197,7 +215,10 @@ function MenuRow({ entry }: { entry: MenuItem }) {
                     isSub
                     entries={entry.items}
                     focusFirst={focusSubmenu}
-                    goBack={() => { setSubmenuOpen(false); itemRef.current?.focus(); }}
+                    goBack={() => {
+                        setSubmenuOpen(false);
+                        itemRef.current?.focus();
+                    }}
                 />
             )}
         </div>

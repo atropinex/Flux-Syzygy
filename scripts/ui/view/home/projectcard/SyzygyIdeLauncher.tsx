@@ -1,12 +1,12 @@
-import { useState } from "react";
-import type { Project } from "../../../../common/CommonInterface";
-import { getIdeLabel, useEditors } from "../../../controller/editor/SyzygyEditor.Controller";
-import { chooseIde, openProject } from "../../../controller/project/SyzygyProject.Controller";
+import {useState} from "react";
+import type {Project} from "../../../../common/CommonInterface";
+import {getIdeLabel, useEditors} from "../../../controller/editor/SyzygyEditor.Controller";
+import {chooseIde, openProject} from "../../../controller/project/SyzygyProject.Controller";
 import SyzygyLauncher from "./SyzygyLauncher";
 
 /** Opens the project in an IDE the user added. Nothing is chosen until they pick one. */
-export default function SyzygyIdeLauncher({ project }: { project: Project }) {
-    const { ides } = useEditors();
+export default function SyzygyIdeLauncher({project}: { project: Project }) {
+    const {ides} = useEditors();
     const [pending, setPending] = useState(false);
 
     const options = ides.filter((ide) => ide.custom);

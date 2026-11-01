@@ -1,14 +1,14 @@
-import { useEffect, useState } from "react";
-import { describeAccelerator, toAccelerator } from "../../../common/utils/AcceleratorHelper";
-import { cx } from "../../../common/utils/ClassHelper";
-import { changeShortcut, useSettings } from "../../controller/settings/SyzygySettings.Controller";
-import { showToast } from "../../controller/toast/SyzygyToast.Controller";
+import {useEffect, useState} from "react";
+import {describeAccelerator, toAccelerator} from "../../../common/utils/AcceleratorHelper";
+import {cx} from "../../../common/utils/ClassHelper";
+import {changeShortcut, useSettings} from "../../controller/settings/SyzygySettings.Controller";
+import {showToast} from "../../controller/toast/SyzygyToast.Controller";
 import controls from "../shared/SyzygyControls.module.css";
 import styles from "./SyzygySettingsPage.module.css";
 
 /** Click, then press the new key combination. Escape or clicking away cancels. */
 export default function SyzygyShortcutButton() {
-    const { shortcut } = useSettings();
+    const {shortcut} = useSettings();
     const [recording, setRecording] = useState(false);
 
     useEffect(() => {

@@ -1,16 +1,39 @@
 .home-list {
-    flex: 1; overflow-x: hidden; overflow-y: auto; scrollbar-width: thin;
+    flex: 1;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: thin;
     padding: 18px calc(28px + var(--indent)) 48px 28px;
     mask-image: linear-gradient(transparent, #000 22px, #000 calc(100% - 30px), transparent);
 }
 
 /* Receding cards move toward the docked edge, so that side needs room for them. */
-:global(html[data-mode="panel"][data-side="right"]) .home-list { padding: 14px calc(20px + var(--indent)) 40px 20px; }
-:global(html[data-mode="panel"][data-side="left"]) .home-list { padding: 14px 20px 40px calc(20px + var(--indent)); }
+:global(html[data-mode="panel"][data-side="right"]) .home-list {
+    padding: 14px calc(20px + var(--indent)) 40px 20px;
+}
+
+:global(html[data-mode="panel"][data-side="left"]) .home-list {
+    padding: 14px 20px 40px calc(20px + var(--indent));
+}
 
 .home-empty {
-    margin: 14vh auto 0; max-width: 340px; text-align: center; color: var(--muted); line-height: 1.5;
+    margin: 14vh auto 0;
+    max-width: 340px;
+    text-align: center;
+    color: var(--muted);
+    line-height: 1.5;
     animation: fade-in var(--t-med) var(--ease-out) both;
 }
-.home-empty strong { display: block; margin-bottom: 4px; font-size: 18px; color: var(--text); }
-@keyframes fade-in { from { opacity: 0; } }
+
+.home-empty strong {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 18px;
+    color: var(--text);
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+}

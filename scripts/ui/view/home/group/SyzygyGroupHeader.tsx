@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from "react";
-import type { Group, Project } from "../../../../common/CommonInterface";
-import { cx } from "../../../../common/utils/ClassHelper";
-import { useContextMenu } from "../../../controller/contextmenu/SyzygyContextMenu.Controller";
+import {useEffect, useRef, useState} from "react";
+import type {Group, Project} from "../../../../common/CommonInterface";
+import {cx} from "../../../../common/utils/ClassHelper";
+import {useContextMenu} from "../../../controller/contextmenu/SyzygyContextMenu.Controller";
 import {
     deleteGroup, renameGroup, startRename, stopRename, toggleGroup, useGroupState
 } from "../../../controller/group/SyzygyGroup.Controller";
@@ -14,8 +14,8 @@ interface Props {
 }
 
 /** The header row of a group: click it to minimize or expand the projects under it. */
-export default function SyzygyGroupHeader({ group, projects }: Props) {
-    const { renamingId } = useGroupState();
+export default function SyzygyGroupHeader({group, projects}: Props) {
+    const {renamingId} = useGroupState();
     const menu = useContextMenu();
     const [armed, setArmed] = useState(false); // "Delete" asks for a second click
 
@@ -43,13 +43,16 @@ export default function SyzygyGroupHeader({ group, projects }: Props) {
                 }
             }}
         >
-            <span className={styles.chevron} />
-            {renamingId === group.id ? <GroupNameInput group={group} /> : <span className={styles.groupName}>{group.name}</span>}
+            <span className={styles.chevron}/>
+            {renamingId === group.id ? <GroupNameInput group={group}/> :
+                <span className={styles.groupName}>{group.name}</span>}
             <span className={styles.groupCount}>{projects.length}</span>
             <span className={styles.groupPeek}>{names ? names + more : "Empty"}</span>
 
             <div className={styles.groupActions} onClick={(event) => event.stopPropagation()}>
-                <button className={cx(controls.btn, controls.btnQuiet, styles.groupAction)} onClick={() => startRename(group.id)}>Rename</button>
+                <button className={cx(controls.btn, controls.btnQuiet, styles.groupAction)}
+                        onClick={() => startRename(group.id)}>Rename
+                </button>
                 <button
                     className={cx(controls.btn, controls.btnQuiet, controls.btnDanger, styles.groupAction)}
                     onClick={() => (armed ? void deleteGroup(group.id) : setArmed(true))}
@@ -62,7 +65,7 @@ export default function SyzygyGroupHeader({ group, projects }: Props) {
 }
 
 /** Enter or clicking away keeps the new name, Escape cancels. */
-function GroupNameInput({ group }: { group: Group }) {
+function GroupNameInput({group}: { group: Group }) {
     const ref = useRef<HTMLInputElement>(null);
     const finished = useRef(false);
 

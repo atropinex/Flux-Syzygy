@@ -1,8 +1,8 @@
-import { useEffect, useLayoutEffect, useMemo, type RefObject } from "react";
-import type { Group, Project } from "../../../common/CommonInterface";
-import { attachList, playFlip } from "../animation/SyzygyAnimation.Controller";
-import { groupStore, useGroupState } from "../group/SyzygyGroup.Controller";
-import { matchesQuery, projectStore, selectProject, useProjectState } from "../project/SyzygyProject.Controller";
+import {useEffect, useLayoutEffect, useMemo, type RefObject} from "react";
+import type {Group, Project} from "../../../common/CommonInterface";
+import {attachList, playFlip} from "../animation/SyzygyAnimation.Controller";
+import {groupStore, useGroupState} from "../group/SyzygyGroup.Controller";
+import {matchesQuery, projectStore, selectProject, useProjectState} from "../project/SyzygyProject.Controller";
 
 /** One line of the list, top to bottom: a group's header, the "Ungrouped" label, or a project card. */
 export type ListRow =
@@ -25,33 +25,38 @@ export function buildRows(projects: Project[], groups: Group[], query: string): 
     const projectRows = (groupId: string | null, hidden: boolean): ListRow[] =>
         projects
             .filter((project) => groupOf(project) === groupId)
-            .map((project) => ({ type: "project", key: `project:${project.id}`, project, visible: matches(project) && !hidden }));
+            .map((project) => ({
+                type: "project",
+                key: `project:${project.id}`,
+                project,
+                visible: matches(project) && !hidden
+            }));
 
     const rows: ListRow[] = [];
     for (const group of groups) {
         const hasMatch = projects.some((project) => groupOf(project) === group.id && matches(project));
-        rows.push({ type: "group", key: `group:${group.id}`, group, visible: !searching || hasMatch });
+        rows.push({type: "group", key: `group:${group.id}`, group, visible: !searching || hasMatch});
         rows.push(...projectRows(group.id, group.collapsed && !searching));
     }
 
     const ungroupedHasMatch = projects.some((project) => groupOf(project) === null && matches(project));
-    rows.push({ type: "ungrouped", key: "ungrouped", visible: groups.length > 0 && ungroupedHasMatch });
+    rows.push({type: "ungrouped", key: "ungrouped", visible: groups.length > 0 && ungroupedHasMatch});
     rows.push(...projectRows(null, false));
     return rows;
 }
 
 export function useListRows(): ListRow[] {
-    const { projects, query } = useProjectState();
-    const { groups } = useGroupState();
+    const {projects, query} = useProjectState();
+    const {groups} = useGroupState();
     return useMemo(() => buildRows(projects, groups, query), [projects, groups, query]);
 }
 
 /** Numbers for the header and the empty state. */
 export function useSummary(): { projects: number; groups: number; matched: number } {
-    const { projects, query } = useProjectState();
-    const { groups } = useGroupState();
+    const {projects, query} = useProjectState();
+    const {groups} = useGroupState();
     const matched = useMemo(() => projects.filter((project) => matchesQuery(project, query)).length, [projects, query]);
-    return { projects: projects.length, groups: groups.length, matched };
+    return {projects: projects.length, groups: groups.length, matched};
 }
 
 // === Keyboard === //
@@ -64,7 +69,7 @@ export function moveSelection(step: 1 | -1): void {
     if (now - lastMoveAt < 90) return;
     lastMoveAt = now;
 
-    const { projects, query, selectedId } = projectStore.get();
+    const {projects, query, selectedId} = projectStore.get();
     const rows = buildRows(projects, groupStore.get().groups, query);
     const visible = rows.flatMap((row) => (row.type === "project" && row.visible ? [row.project] : []));
     if (visible.length === 0) return;
@@ -78,17 +83,21 @@ export function moveSelection(step: 1 | -1): void {
 /** Off while the panel is first being built: opening the panel already slides the whole list in. */
 let entranceEnabled = false;
 export const isEntranceEnabled = () => entranceEnabled;
-export const setEntranceEnabled = (enabled: boolean) => { entranceEnabled = enabled; };
+export const setEntranceEnabled = (enabled: boolean) => {
+    entranceEnabled = enabled;
+};
 
 // === Behaviour of the list element === //
 
 /** Bends the list while scrolling, glides rows that changed places, and deselects a project that gets hidden. */
-export function useListBehavior(listRef: RefObject<HTMLElement>, rows: ListRow[]): void {
-    const { selectedId } = useProjectState();
+export function useListBehavior(listRef: RefObject<HTMLElement | null>, rows: ListRow[]): void {
+    const {selectedId} = useProjectState();
     const order = rows.map((row) => row.key).join("|");
 
     useEffect(() => attachList(listRef.current!), [listRef]);
-    useLayoutEffect(() => { playFlip(); }, [order]);
+    useLayoutEffect(() => {
+        playFlip();
+    }, [order]);
 
     useEffect(() => {
         const selected = rows.find((row) => row.type === "project" && row.project.id === selectedId);

@@ -1,10 +1,11 @@
-import { globalShortcut } from "electron";
+import {globalShortcut} from "electron";
 
 /** The global shortcut that shows and hides the panel, from any app. */
 export class SyzygyKeybindController {
     private current = "";
 
-    constructor(private readonly onTrigger: () => void) {}
+    constructor(private readonly onTrigger: () => void) {
+    }
 
     /** Registers the shortcut, replacing the previous one. Returns false (and keeps the old one) if it can't be used. */
     register(accelerator: string): boolean {
