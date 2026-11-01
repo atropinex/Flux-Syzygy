@@ -154,3 +154,4 @@ vite.config.ts.timestamp-*
 /.idea/vcs.xml
 /.idea/claudeCodeTabState.xml
 /.idea/.name
+/release

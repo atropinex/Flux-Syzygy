@@ -1,9 +1,8 @@
-﻿
 {
   "name": "flux-syzygy",
-  "version": "0.3.0",
+  "version": "0.0.1",
   "description": "A project launcher for developers: pick a project, see its git status and languages, open it in its engine editor or your IDE.",
-  "author": "Flux Syzygy",
+  "author": "atropinex",
   "main": "./out/main/mainindex.js",
   "scripts": {
     "dev": "electron-vite dev",

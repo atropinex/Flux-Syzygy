@@ -4,7 +4,7 @@ export const DEFAULT_THEMES: Record<string, string> = {
     'midnight.yaml': `# Flux Syzygy theme. Copy this file into your themes folder and edit it.
 # Wrap colours in quotes: an unquoted "#" starts a YAML comment.
 name: Midnight
-author: Flux Syzygy
+author: atropinex
 mode: dark          # dark | light. Styles native controls such as dropdowns.
 accent: project     # project = tint the UI with each project's engine colour, fixed = always use colors.accent
 radius: 14          # corner radius in px (0 to 32)
@@ -21,7 +21,7 @@ colors:
   danger: "#ff8a8a"
 `,
     'aurora.yaml': `name: Aurora
-author: Flux Syzygy
+author: atropinex
 mode: dark
 accent: fixed
 radius: 18
@@ -38,7 +38,7 @@ colors:
   danger: "#ff8f8f"
 `,
     'ember.yaml': `name: Ember
-author: Flux Syzygy
+author: atropinex
 mode: dark
 accent: fixed
 radius: 6
@@ -55,7 +55,7 @@ colors:
   danger: "#ff7a7a"
 `,
     'daylight.yaml': `name: Daylight
-author: Flux Syzygy
+author: atropinex
 mode: light
 accent: fixed
 radius: 12

@@ -151,7 +151,7 @@ function MenuList({entries, x = 0, y = 0, isSub = false, focusFirst = false, goB
 
 function MenuRow({entry}: { entry: MenuItem }) {
     const itemRef = useRef<HTMLButtonElement>(null);
-    const timer = useRef<number>();
+    const timer = useRef<number | undefined>(undefined);
     const [submenuOpen, setSubmenuOpen] = useState(false);
     const [focusSubmenu, setFocusSubmenu] = useState(false);
     const [armed, setArmed] = useState(false); // "confirm" items ask for a second click
