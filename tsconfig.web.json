@@ -1,0 +1,27 @@
+﻿{
+  "compilerOptions": {
+    "composite": true,
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "jsx": "react-jsx",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "noEmit": true
+  },
+  "include": [
+    "scripts/global.d.ts",
+    "scripts/vite-env.d.ts",
+    "scripts/ui/**/*.ts",
+    "scripts/ui/**/*.tsx"
+  ],
+  "exclude": [
+    "scripts/ui/mainindex.ts"
+  ]
+}

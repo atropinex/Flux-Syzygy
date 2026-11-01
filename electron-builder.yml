@@ -1,0 +1,35 @@
+﻿# Packaging. Run `npm run dist` (or dist:win / dist:mac / dist:linux). Installers land in ./release
+appId: com.flux.syzygy
+productName: Flux Syzygy
+copyright: Flux Syzygy
+
+directories:
+  buildResources: build   # icon.png lives here; electron-builder converts it to .ico and .icns
+  output: release
+
+files:
+  - out/**
+  - package.json
+
+asar: true
+
+win:
+  target:
+    - target: nsis
+      arch: [ x64 ]
+    - target: portable
+      arch: [ x64 ]
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  shortcutName: Flux Syzygy
+
+mac:
+  target: [ dmg ]
+  category: public.app-category.developer-tools
+  # The tray app has no Dock icon of its own, see app.dock?.hide() in mainindex.ts.
+
+linux:
+  target: [ AppImage, deb ]
+  category: Development
+  maintainer: Flux Syzygy

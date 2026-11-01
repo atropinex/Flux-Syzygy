@@ -1,0 +1,65 @@
+/* === Theme tokens ===
+   Colours are registered properties so a theme change (or a new accent when you pick another project)
+   cross-fades instead of snapping. A theme's YAML file fills them in at runtime (SyzygyTheme.Controller). */
+@property --accent       { syntax: "<color>"; inherits: true; initial-value: #ff66aa; }
+@property --background   { syntax: "<color>"; inherits: true; initial-value: #0d0b14; }
+@property --panel        { syntax: "<color>"; inherits: true; initial-value: #191525; }
+@property --panel-raised { syntax: "<color>"; inherits: true; initial-value: #241e36; }
+@property --text         { syntax: "<color>"; inherits: true; initial-value: #f3eefc; }
+@property --muted        { syntax: "<color>"; inherits: true; initial-value: #9b93b4; }
+
+:root {
+    --on-accent: #17101f;
+    --danger: #ff8a8a;
+    --radius: 14px;
+    --motion: 1; /* duration multiplier from the theme; 0 turns animation off */
+
+    --line: color-mix(in srgb, var(--text) 10%, transparent);
+    --wash: color-mix(in srgb, var(--text) 7%, transparent);
+
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+    --t-fast: calc(0.2s * var(--motion));
+    --t-med: calc(0.5s * var(--motion));
+    --t-slow: calc(0.8s * var(--motion));
+
+    --indent: 52px; /* how far unselected cards sit toward the screen's inside */
+    --dir: 1;       /* which way cards recede: 1 = toward the right edge, -1 = toward the left edge */
+
+    font-family: "Segoe UI Variable Display", "Segoe UI", Inter, system-ui, sans-serif;
+    transition:
+        --accent var(--t-slow) var(--ease-soft),
+        --background var(--t-med) var(--ease-soft),
+        --panel var(--t-med) var(--ease-soft),
+        --panel-raised var(--t-med) var(--ease-soft),
+        --text var(--t-med) var(--ease-soft),
+        --muted var(--t-med) var(--ease-soft);
+}
+
+/* === Base === */
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+html, body, #root { height: 100%; }
+
+body {
+    margin: 0;
+    overflow: hidden;
+    background: var(--background);
+    color: var(--text);
+}
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* === Window state ===
+   The controllers set data-mode, data-side and data-closed on <html>, so any component can react to them:
+     data-mode="panel"  the window is a transparent slide-in panel (absent for a regular window)
+     data-side="right"  which screen edge the panel docks to
+     data-closed        the panel is currently slid away */
+html[data-mode="panel"] { --indent: 34px; }
+html[data-mode="panel"] body { background: transparent; }
+html[data-mode="panel"][data-side="left"] { --dir: -1; }
+
+@media (max-width: 900px) {
+    :root { --indent: 24px; }
+}
