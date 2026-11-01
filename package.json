@@ -15,7 +15,8 @@
     "dist": "npm run build && electron-builder",
     "dist:win": "npm run build && electron-builder --win",
     "dist:mac": "npm run build && electron-builder --mac",
-    "dist:linux": "npm run build && electron-builder --linux"
+    "dist:linux": "npm run build && electron-builder --linux",
+    "dist:all": "npm run build && electron-builder --win --mac --linux"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",
@@ -27,6 +28,67 @@
     "electron-vite": "^6.0.0",
     "typescript": "^5.9.3",
     "vite": "^8.3.5"
+  },
+  "build": {
+    "appId": "com.flux.syzygy",
+    "productName": "Flux Syzygy",
+    "copyright": "Copyright © 2026 Atropinex",
+    "asar": true,
+    "directories": {
+      "buildResources": "build",
+      "output": "release"
+    },
+    "files": [
+      "out/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "build/flux-syzygy.ico",
+        "to": "flux-syzygy.ico"
+      }
+    ],
+    "win": {
+      "icon": "build/flux-syzygy.ico",
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "artifactName": "${productName}-${version}-Windows-${arch}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Flux Syzygy",
+      "deleteAppDataOnUninstall": false,
+      "installerIcon": "build/flux-syzygy.ico",
+      "uninstallerIcon": "build/flux-syzygy.ico",
+      "installerHeaderIcon": "build/flux-syzygy.ico"
+    },
+    "mac": {
+      "icon": "build/flux-syzygy.icns",
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "category": "public.app-category.developer-tools",
+      "artifactName": "${productName}-${version}-macOS-${arch}.${ext}"
+    },
+    "dmg": {
+      "sign": false
+    },
+    "linux": {
+      "icon": "build/flux-syzygy.png",
+      "category": "Development",
+      "target": [
+        "AppImage",
+        "deb",
+        "rpm"
+      ],
+      "artifactName": "${productName}-${version}-Linux-${arch}.${ext}"
+    }
   },
   "dependencies": {
     "react": "^19.2.0",
