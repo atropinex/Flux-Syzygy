@@ -1,0 +1,44 @@
+/* The stage is the whole window; the panel is what you see. In a regular window they are the same size. */
+.stage { height: 100%; }
+
+.panel {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    isolation: isolate;
+    background: var(--background);
+}
+
+.backdrop {
+    position: absolute; inset: 0; z-index: -1;
+    background:
+        radial-gradient(1000px 560px at 10% -12%, color-mix(in srgb, var(--accent) 32%, transparent), transparent 70%),
+        radial-gradient(800px 520px at 108% 112%, color-mix(in srgb, var(--accent) 15%, transparent), transparent 70%),
+        var(--background);
+}
+
+/* === Panel mode ===
+   The window is transparent and fixed to a screen edge; the panel slides across it. <html> has
+   data-closed while the panel is away. Opening removes it, closing adds it, and the transitions
+   below do the rest: the panel glides in, then the rows follow one after another. */
+:global(html[data-mode="panel"]) .stage { position: fixed; inset: 0; }
+
+:global(html[data-mode="panel"]) .panel {
+    position: absolute; top: 12px; bottom: 12px; left: 12px; width: 540px; height: auto;
+    border-radius: 24px; border: 1px solid var(--line);
+    box-shadow: 0 28px 80px -16px #000b;
+    will-change: transform, opacity;
+    transition: transform var(--t-slow) var(--ease-out), opacity var(--t-med) var(--ease-soft);
+}
+
+:global(html[data-mode="panel"][data-closed]) .panel {
+    transform: translateX(calc(-100% - 60px)); opacity: 0; pointer-events: none;
+    /* Leaving is quicker than arriving, and accelerates instead of easing out. */
+    transition: transform var(--t-med) cubic-bezier(0.5, 0, 0.75, 0.2), opacity var(--t-med) ease-in;
+}
+
+/* Docked to the right edge: everything mirrors. */
+:global(html[data-mode="panel"][data-side="right"]) .panel { left: auto; right: 12px; }
+:global(html[data-mode="panel"][data-side="right"][data-closed]) .panel { transform: translateX(calc(100% + 60px)); }

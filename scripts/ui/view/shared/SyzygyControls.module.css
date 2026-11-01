@@ -1,0 +1,53 @@
+/* Buttons, form fields and small pieces that several views share. */
+
+.btn, .icon-btn {
+    border: 0;
+    font: inherit;
+    color: var(--text);
+    cursor: pointer;
+    transition: background-color var(--t-fast), transform var(--t-fast) var(--ease-out), opacity var(--t-fast);
+}
+
+.btn { height: 40px; padding: 0 20px; border-radius: 999px; font-weight: 600; background: var(--wash); }
+.btn:hover { background: color-mix(in srgb, var(--text) 13%, transparent); }
+
+.icon-btn { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--wash); }
+.icon-btn:hover { background: color-mix(in srgb, var(--text) 13%, transparent); }
+
+.btn:active, .icon-btn:active { transform: scale(0.96); }
+.btn:disabled { opacity: 0.45; cursor: default; }
+
+.btn-primary { background: var(--accent); color: var(--on-accent); }
+.btn-primary:hover { background: color-mix(in srgb, var(--accent) 86%, var(--text)); }
+.btn-quiet { background: transparent; }
+.btn-danger { color: var(--danger); }
+.btn-outline { background: transparent; box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--accent) 70%, transparent); }
+.btn-outline:hover { background: color-mix(in srgb, var(--accent) 16%, transparent); }
+.wide { width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* A labelled dropdown. */
+.field { display: grid; gap: 8px; font-size: 13px; font-weight: 600; color: var(--muted); }
+.select {
+    height: 40px; padding: 0 36px 0 14px; border-radius: 10px; border: 1px solid var(--line);
+    background-color: color-mix(in srgb, var(--background) 70%, transparent); color: var(--text);
+    font: inherit; font-weight: 400; appearance: none;
+    background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%);
+    background-position: calc(100% - 19px) 50%, calc(100% - 14px) 50%;
+    background-size: 5px 5px; background-repeat: no-repeat;
+}
+
+.hint { margin: 0; font-size: 12px; font-weight: 400; line-height: 1.4; }
+.hint-warn { color: var(--danger); }
+.muted { margin: 0; font-size: 14px; color: var(--muted); }
+.small { font-size: 12px; }
+
+/* A round badge with a short symbol, e.g. (TS) for TypeScript. */
+.badge {
+    display: inline-grid; place-items: center; min-width: 22px; height: 22px; padding: 0 4px; flex: none;
+    border-radius: 50%; font-size: 9px; font-weight: 800; color: #14111c; background: var(--icon, #aaa);
+}
+
+.chip {
+    display: inline-flex; align-items: center; gap: 8px; padding: 3px 12px 3px 3px;
+    border-radius: 999px; background: var(--wash); font-size: 13px;
+}
