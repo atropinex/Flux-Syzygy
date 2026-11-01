@@ -1,6 +1,6 @@
-import { useEffect } from "react";
-import { announceReady, useAccent, useAppKeyboard } from "../../controller/app/SyzygyApp.Controller";
-import { handleStagePointerDown } from "../../controller/panel/SyzygyPanel.Controller";
+import {useEffect} from "react";
+import {announceReady, useAccent, useAppKeyboard} from "../../controller/app/SyzygyApp.Controller";
+import {handleStagePointerDown} from "../../controller/panel/SyzygyPanel.Controller";
 import SyzygyContextMenu from "../contextmenu/SyzygyContextMenu";
 import SyzygyHomePage from "../home/SyzygyHomePage";
 import SyzygyNavbar from "../navbar/SyzygyNavbar";
@@ -16,13 +16,13 @@ export default function SyzygyApp() {
     return (
         <div className={styles.stage} onPointerDown={handleStagePointerDown}>
             <div className={styles.panel} data-panel>
-                <div className={styles.backdrop} />
-                <SyzygyNavbar />
-                <SyzygyHomePage />
-                <SyzygyToast />
-                <SyzygySettingsPage />
+                <div className={styles.backdrop}/>
+                <SyzygyNavbar/>
+                <SyzygyHomePage/>
+                <SyzygyToast/>
+                <SyzygySettingsPage/>
             </div>
-            <SyzygyContextMenu />
+            <SyzygyContextMenu/>
         </div>
     );
 }

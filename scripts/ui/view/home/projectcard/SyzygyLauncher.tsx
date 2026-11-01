@@ -1,5 +1,5 @@
-import type { IdeOption } from "../../../../common/CommonInterface";
-import { cx } from "../../../../common/utils/ClassHelper";
+import type {IdeOption} from "../../../../common/CommonInterface";
+import {cx} from "../../../../common/utils/ClassHelper";
 import controls from "../../shared/SyzygyControls.module.css";
 import styles from "./SyzygyProjectCard.module.css";
 
@@ -23,7 +23,8 @@ export default function SyzygyLauncher(props: Props) {
         <div className={styles.launcher}>
             <label className={controls.field}>
                 {props.title}
-                <select className={controls.select} value={props.value} onChange={(event) => props.onChange(event.target.value || null)}>
+                <select className={controls.select} value={props.value}
+                        onChange={(event) => props.onChange(event.target.value || null)}>
                     <option value="">{props.firstOption}</option>
                     {props.options.map((option) => (
                         <option key={option.id} value={option.id}>{option.label}</option>

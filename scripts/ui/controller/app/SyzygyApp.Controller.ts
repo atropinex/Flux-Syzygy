@@ -1,13 +1,13 @@
-import { useEffect } from "react";
-import { KIND_STYLES } from "../../../common/projects/SyzygyBadgeStyle";
-import { closeContextMenu, isContextMenuOpen } from "../contextmenu/SyzygyContextMenu.Controller";
-import { loadIdes } from "../editor/SyzygyEditor.Controller";
-import { loadGroups } from "../group/SyzygyGroup.Controller";
-import { moveSelection, setEntranceEnabled } from "../list/SyzygyList.Controller";
-import { hidePanel, initializePanel } from "../panel/SyzygyPanel.Controller";
-import { loadProjects, projectStore, setQuery, useProjectState } from "../project/SyzygyProject.Controller";
-import { closeSettings, isSettingsOpen, loadSettings } from "../settings/SyzygySettings.Controller";
-import { applyAccent, initializeTheme } from "../theme/SyzygyTheme.Controller";
+import {useEffect} from "react";
+import {KIND_STYLES} from "../../../common/projects/SyzygyBadgeStyle";
+import {closeContextMenu, isContextMenuOpen} from "../contextmenu/SyzygyContextMenu.Controller";
+import {loadIdes} from "../editor/SyzygyEditor.Controller";
+import {loadGroups} from "../group/SyzygyGroup.Controller";
+import {moveSelection, setEntranceEnabled} from "../list/SyzygyList.Controller";
+import {hidePanel, initializePanel} from "../panel/SyzygyPanel.Controller";
+import {loadProjects, projectStore, setQuery, useProjectState} from "../project/SyzygyProject.Controller";
+import {closeSettings, isSettingsOpen, loadSettings} from "../settings/SyzygySettings.Controller";
+import {applyAccent, initializeTheme} from "../theme/SyzygyTheme.Controller";
 
 const focusSearch = () => document.querySelector<HTMLInputElement>("[data-search]")?.focus();
 
@@ -41,7 +41,7 @@ export function announceReady(): void {
 
 /** Tints the app with the selected project's engine colour (unless the theme pins its own accent). */
 export function useAccent(): void {
-    const { projects, selectedId } = useProjectState();
+    const {projects, selectedId} = useProjectState();
     const project = projects.find((item) => item.id === selectedId);
     const color = project ? KIND_STYLES[project.kind].color : null;
 

@@ -1,6 +1,6 @@
-import type { PanelSide } from "../../../common/projects/SyzygyContract";
-import { settingsStore } from "../settings/SyzygySettings.Controller";
-import { motionScale } from "../theme/SyzygyTheme.Controller";
+import type {PanelSide} from "../../../common/projects/SyzygyContract";
+import {settingsStore} from "../settings/SyzygySettings.Controller";
+import {motionScale} from "../theme/SyzygyTheme.Controller";
 
 /**
  * The slide-in panel. The main process shows the (transparent) window and tells us to "open" or
@@ -66,7 +66,9 @@ function close(): void {
     const mine = ++token;
     assignStagger();
     // Tell the main process once the panel has left, so it can hide the window.
-    void slideOut().then(() => { if (mine === token) void window.api.panelClosed(); });
+    void slideOut().then(() => {
+        if (mine === token) void window.api.panelClosed();
+    });
 }
 
 /** Starts listening to the shortcut. Returns a function that stops. `onOpened` runs each time the panel arrives. */
@@ -87,7 +89,7 @@ export async function changePanelSide(side: PanelSide): Promise<void> {
     assignStagger();
     await slideOut();
     await window.api.setPanelSide(side); // the window moves while the panel is out of sight
-    settingsStore.set((settings) => ({ ...settings, panelSide: side }));
+    settingsStore.set((settings) => ({...settings, panelSide: side}));
     root.dataset.side = side;
     open(() => undefined);
 }

@@ -1,12 +1,12 @@
-import { dialog, ipcMain } from "electron";
-import type { IdeOption, RescanResult } from "../../CommonInterface";
-import { EngineModel } from "../../models/EngineModel";
-import { IdeModel } from "../../models/IdeModel";
-import { ProjectModel } from "../../models/ProjectModel";
-import { ScannerModel } from "../../models/ScannerModel";
-import { SyzygyIPC } from "../SyzygyConnection";
-import type { IdeId } from "../SyzygyContract";
-import { SyzygyPanelController } from "./SyzygyPanelController";
+import {dialog, ipcMain} from "electron";
+import type {IdeOption, RescanResult} from "../../CommonInterface";
+import {EngineModel} from "../../models/EngineModel";
+import {IdeModel} from "../../models/IdeModel";
+import {ProjectModel} from "../../models/ProjectModel";
+import {ScannerModel} from "../../models/ScannerModel";
+import {SyzygyIPC} from "../SyzygyConnection";
+import type {IdeId} from "../SyzygyContract";
+import {SyzygyPanelController} from "./SyzygyPanelController";
 
 /** Answers the page's requests about engine editors and the IDEs the user added. */
 export class SyzygyEditorController {
@@ -16,7 +16,8 @@ export class SyzygyEditorController {
         private readonly projects: ProjectModel,
         private readonly engines: EngineModel,
         private readonly scanner: ScannerModel
-    ) {}
+    ) {
+    }
 
     register(): void {
         ipcMain.handle(SyzygyIPC.listIdes, () => this.options());
@@ -36,12 +37,12 @@ export class SyzygyEditorController {
     private async addCustomIde(): Promise<IdeOption | null> {
         if (this.panel.dialogOpen) return null; // one file picker at a time
 
-        const { canceled, filePaths } = await this.panel.withDialog((parent) =>
+        const {canceled, filePaths} = await this.panel.withDialog((parent) =>
             dialog.showOpenDialog(parent, {
                 title: "Choose the IDE's program",
                 // On macOS an application is a folder (.app), so folders must be selectable too.
                 properties: process.platform === "darwin" ? ["openFile", "openDirectory"] : ["openFile"],
-                filters: process.platform === "win32" ? [{ name: "Programs", extensions: ["exe", "cmd", "bat"] }] : []
+                filters: process.platform === "win32" ? [{name: "Programs", extensions: ["exe", "cmd", "bat"]}] : []
             }));
         if (canceled || filePaths.length === 0) return null;
 
@@ -54,9 +55,9 @@ export class SyzygyEditorController {
 
         const autoEditors: RescanResult["autoEditors"] = {};
         for (const project of await this.projects.list()) {
-            const { kind } = await this.scanner.scan(project.path);
+            const {kind} = await this.scanner.scan(project.path);
             autoEditors[project.id] = await this.engines.findAuto(project.path, kind);
         }
-        return { ides: await this.options(), autoEditors };
+        return {ides: await this.options(), autoEditors};
     }
 }

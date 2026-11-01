@@ -1,12 +1,12 @@
-import { useState } from "react";
-import type { Project } from "../../../../common/CommonInterface";
-import { cx } from "../../../../common/utils/ClassHelper";
-import { getIdeLabel } from "../../../controller/editor/SyzygyEditor.Controller";
-import { openBoth } from "../../../controller/project/SyzygyProject.Controller";
+import {useState} from "react";
+import type {Project} from "../../../../common/CommonInterface";
+import {cx} from "../../../../common/utils/ClassHelper";
+import {getIdeLabel} from "../../../controller/editor/SyzygyEditor.Controller";
+import {openBoth} from "../../../controller/project/SyzygyProject.Controller";
 import controls from "../../shared/SyzygyControls.module.css";
 
 /** Opens the engine editor and the IDE at the same time. Only needs to exist for projects with an engine. */
-export default function SyzygyOpenBoth({ project }: { project: Project }) {
+export default function SyzygyOpenBoth({project}: { project: Project }) {
     const [pending, setPending] = useState(false);
 
     const hasEngine = Boolean((project.engine && getIdeLabel(project.engine)) || project.autoEditor);
@@ -24,7 +24,8 @@ export default function SyzygyOpenBoth({ project }: { project: Project }) {
 
     return (
         <div>
-            <button className={cx(controls.btn, controls.wide)} disabled={pending || !ready} onClick={() => void open()}>
+            <button className={cx(controls.btn, controls.wide)} disabled={pending || !ready}
+                    onClick={() => void open()}>
                 Open both
             </button>
             {project.exists && !ready && (

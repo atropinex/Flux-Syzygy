@@ -1,9 +1,9 @@
-import type { ProjectKind } from "./SyzygyContract";
+import type {ProjectKind} from "./SyzygyContract";
 
 // === Window === //
 /** Window width in panel mode: the panel (540px) plus gutters for its shadow (12px at the screen edge, 28px on the other side). */
 export const PANEL_WINDOW_WIDTH = 580;
-export const REGULAR_WINDOW = { width: 1100, height: 760, minWidth: 760, minHeight: 520 } as const;
+export const REGULAR_WINDOW = {width: 1100, height: 760, minWidth: 760, minHeight: 520} as const;
 export const WINDOW_BACKGROUND = "#0d0b14";
 
 // === Guards against repeated actions === //
@@ -51,16 +51,21 @@ export const EXTENSION_TO_LANGUAGE: Readonly<Record<string, string>> = {
 };
 
 /** Which marker files make a folder a project of this kind. Engines come first: they often contain package.json or .sln too. */
-export const KIND_MARKERS: ReadonlyArray<{ kind: ProjectKind; names?: string[]; all?: string[]; endsWith?: string[] }> = [
-    { kind: "unity", all: ["ProjectSettings", "Assets"] },
-    { kind: "unreal", endsWith: [".uproject"] },
-    { kind: "cocos", names: [".creator"] },                       // Cocos Creator 3.x
-    { kind: "cocos", all: ["project.json", "assets", "settings"] }, // Cocos Creator 2.x
-    { kind: "godot", names: ["project.godot"] },
-    { kind: "dotnet", endsWith: [".sln", ".csproj"] },
-    { kind: "rust", names: ["Cargo.toml"] },
-    { kind: "go", names: ["go.mod"] },
-    { kind: "java", names: ["pom.xml", "build.gradle", "build.gradle.kts"] },
-    { kind: "python", names: ["pyproject.toml", "requirements.txt", "setup.py"] },
-    { kind: "node", names: ["package.json"] }
+export const KIND_MARKERS: ReadonlyArray<{
+    kind: ProjectKind;
+    names?: string[];
+    all?: string[];
+    endsWith?: string[]
+}> = [
+    {kind: "unity", all: ["ProjectSettings", "Assets"]},
+    {kind: "unreal", endsWith: [".uproject"]},
+    {kind: "cocos", names: [".creator"]},                       // Cocos Creator 3.x
+    {kind: "cocos", all: ["project.json", "assets", "settings"]}, // Cocos Creator 2.x
+    {kind: "godot", names: ["project.godot"]},
+    {kind: "dotnet", endsWith: [".sln", ".csproj"]},
+    {kind: "rust", names: ["Cargo.toml"]},
+    {kind: "go", names: ["go.mod"]},
+    {kind: "java", names: ["pom.xml", "build.gradle", "build.gradle.kts"]},
+    {kind: "python", names: ["pyproject.toml", "requirements.txt", "setup.py"]},
+    {kind: "node", names: ["package.json"]}
 ];

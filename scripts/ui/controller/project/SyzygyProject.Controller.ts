@@ -1,10 +1,10 @@
-import type { AutoEditor, Project } from "../../../common/CommonInterface";
-import type { IdeId, OpenTarget } from "../../../common/projects/SyzygyContract";
-import { exclusive } from "../../../common/utils/ExclusiveHelper";
-import { keepCurveUpdating, prepareFlip } from "../animation/SyzygyAnimation.Controller";
-import { hideAfterOpening } from "../panel/SyzygyPanel.Controller";
-import { createStore, useStore } from "../store/SyzygyStore.Controller";
-import { showToast } from "../toast/SyzygyToast.Controller";
+import type {AutoEditor, Project} from "../../../common/CommonInterface";
+import type {IdeId, OpenTarget} from "../../../common/projects/SyzygyContract";
+import {exclusive} from "../../../common/utils/ExclusiveHelper";
+import {keepCurveUpdating, prepareFlip} from "../animation/SyzygyAnimation.Controller";
+import {hideAfterOpening} from "../panel/SyzygyPanel.Controller";
+import {createStore, useStore} from "../store/SyzygyStore.Controller";
+import {showToast} from "../toast/SyzygyToast.Controller";
 
 interface ProjectState {
     projects: Project[];
@@ -13,7 +13,7 @@ interface ProjectState {
     leaving: string[];   // projects that are sliding out before they are removed
 }
 
-export const projectStore = createStore<ProjectState>({ projects: [], selectedId: null, query: "", leaving: [] });
+export const projectStore = createStore<ProjectState>({projects: [], selectedId: null, query: "", leaving: []});
 export const useProjectState = () => useStore(projectStore);
 
 export const getProject = (id: string) => projectStore.get().projects.find((project) => project.id === id);
@@ -27,24 +27,24 @@ export function matchesQuery(project: Project, query: string): boolean {
 
 export async function loadProjects(): Promise<void> {
     const projects = await window.api.listProjects();
-    projectStore.set((state) => ({ ...state, projects }));
+    projectStore.set((state) => ({...state, projects}));
 }
 
 export function selectProject(id: string | null): void {
     if (projectStore.get().selectedId === id) return;
-    projectStore.set((state) => ({ ...state, selectedId: id }));
+    projectStore.set((state) => ({...state, selectedId: id}));
     keepCurveUpdating(900);
 }
 
 export function setQuery(query: string): void {
-    projectStore.set((state) => ({ ...state, query }));
+    projectStore.set((state) => ({...state, query}));
     keepCurveUpdating(500);
 }
 
 export function patchProject(id: string, changes: Partial<Project>): void {
     projectStore.set((state) => ({
         ...state,
-        projects: state.projects.map((project) => (project.id === id ? { ...project, ...changes } : project))
+        projects: state.projects.map((project) => (project.id === id ? {...project, ...changes} : project))
     }));
 }
 
@@ -52,7 +52,7 @@ export function patchProject(id: string, changes: Partial<Project>): void {
 export function applyAutoEditors(autoEditors: Record<string, AutoEditor | null>): void {
     projectStore.set((state) => ({
         ...state,
-        projects: state.projects.map((project) => ({ ...project, autoEditor: autoEditors[project.id] ?? null }))
+        projects: state.projects.map((project) => ({...project, autoEditor: autoEditors[project.id] ?? null}))
     }));
 }
 
@@ -63,7 +63,7 @@ export const addProject = exclusive(async (): Promise<void> => {
 
     if (!getProject(added.id)) {
         prepareFlip();
-        projectStore.set((state) => ({ ...state, projects: [...state.projects, added] }));
+        projectStore.set((state) => ({...state, projects: [...state.projects, added]}));
     }
     selectProject(added.id);
 });
@@ -128,12 +128,12 @@ export async function openBoth(project: Project): Promise<void> {
 }
 
 export async function chooseIde(project: Project, ide: IdeId | null): Promise<void> {
-    patchProject(project.id, { ide });
+    patchProject(project.id, {ide});
     await window.api.setIde(project.id, ide);
 }
 
 export async function chooseEngine(project: Project, engine: IdeId | null): Promise<void> {
-    patchProject(project.id, { engine });
+    patchProject(project.id, {engine});
     await window.api.setEngine(project.id, engine);
 }
 

@@ -38,8 +38,8 @@ export function toAccelerator(event: KeyboardEvent): string | null {
 }
 
 const DISPLAY_NAMES: Record<string, string> = IS_MAC
-    ? { Control: "⌃", Command: "⌘", Alt: "⌥", Shift: "⇧", CommandOrControl: "⌘", Super: "⌘" }
-    : { Control: "Ctrl", Command: "Cmd", CommandOrControl: "Ctrl", Super: "Win" };
+    ? {Control: "⌃", Command: "⌘", Alt: "⌥", Shift: "⇧", CommandOrControl: "⌘", Super: "⌘"}
+    : {Control: "Ctrl", Command: "Cmd", CommandOrControl: "Ctrl", Super: "Win"};
 
 /** "Control+Alt+Space" -> "Ctrl + Alt + Space" */
 export function describeAccelerator(accelerator: string): string {

@@ -1,8 +1,8 @@
-import { promises as fs } from "fs";
-import { homedir } from "os";
-import { join } from "path";
-import type { AutoEditor, EngineEditor } from "../CommonInterface";
-import { ENGINE_NAMES, isEngineKind, type EngineKind, type ProjectKind } from "../projects/SyzygyContract";
+import {promises as fs} from "fs";
+import {homedir} from "os";
+import {join} from "path";
+import type {AutoEditor, EngineEditor} from "../CommonInterface";
+import {ENGINE_NAMES, isEngineKind, type EngineKind, type ProjectKind} from "../projects/SyzygyContract";
 
 const PLATFORM = process.platform;
 const HOME = homedir();
@@ -10,7 +10,7 @@ const HOME = homedir();
 const exists = (file: string) => fs.access(file).then(() => true, () => false);
 
 async function subfolders(dir: string): Promise<string[]> {
-    const entries = await fs.readdir(dir, { withFileTypes: true }).catch(() => []);
+    const entries = await fs.readdir(dir, {withFileTypes: true}).catch(() => []);
     return entries.filter((entry) => entry.isDirectory()).map((entry) => entry.name);
 }
 
@@ -23,7 +23,13 @@ async function readJson(file: string): Promise<unknown> {
 }
 
 function makeEditor(engine: EngineKind, version: string, executable: string): EngineEditor {
-    return { id: `engine:${engine}:${version}`, label: `${ENGINE_NAMES[engine]} ${version}`, engine, version, executable };
+    return {
+        id: `engine:${engine}:${version}`,
+        label: `${ENGINE_NAMES[engine]} ${version}`,
+        engine,
+        version,
+        executable
+    };
 }
 
 /** Looks for `<root>/<version>/<executable path>` in each root and keeps the ones that exist. */
@@ -88,7 +94,7 @@ export class EngineModel {
     async findAuto(projectPath: string, kind: ProjectKind): Promise<AutoEditor | null> {
         const required = await this.readRequiredVersion(projectPath, kind);
         const match = this.match(kind, required, await this.editors());
-        return match ? { id: match.id, label: match.label } : null;
+        return match ? {id: match.id, label: match.label} : null;
     }
 
     /** How to tell each editor which project to open. */
@@ -110,7 +116,7 @@ export class EngineModel {
 
     private async detectAll(): Promise<EngineEditor[]> {
         const all = (await Promise.all([this.detectUnity(), this.detectUnreal(), this.detectCocos()])).flat();
-        return all.sort((a, b) => a.engine.localeCompare(b.engine) || b.version.localeCompare(a.version, undefined, { numeric: true }));
+        return all.sort((a, b) => a.engine.localeCompare(b.engine) || b.version.localeCompare(a.version, undefined, {numeric: true}));
     }
 
     /** Editors the Unity Hub knows about, including ones added by hand from any folder ("Locate editor"). */
@@ -180,10 +186,12 @@ export class EngineModel {
         if (PLATFORM === "win32") {
             // The Epic Games Launcher keeps a list of everything it installed, wherever it was installed to.
             const manifest = join(process.env.ProgramData ?? "C:\\ProgramData", "Epic", "UnrealEngineLauncher", "LauncherInstalled.dat");
-            const data = (await readJson(manifest)) as { InstallationList?: { InstallLocation?: string; AppName?: string }[] } | null;
+            const data = (await readJson(manifest)) as {
+                InstallationList?: { InstallLocation?: string; AppName?: string }[]
+            } | null;
             for (const item of data?.InstallationList ?? []) {
                 const version = item.AppName?.match(folderPattern)?.[1];
-                if (version && item.InstallLocation) installs.push({ version, location: item.InstallLocation });
+                if (version && item.InstallLocation) installs.push({version, location: item.InstallLocation});
             }
         }
 
@@ -191,7 +199,7 @@ export class EngineModel {
         if (defaultRoot) {
             for (const folder of await subfolders(defaultRoot)) {
                 const version = folder.match(folderPattern)?.[1];
-                if (version) installs.push({ version, location: join(defaultRoot, folder) });
+                if (version) installs.push({version, location: join(defaultRoot, folder)});
             }
         }
         return installs;
@@ -200,7 +208,7 @@ export class EngineModel {
     private async detectUnreal(): Promise<EngineEditor[]> {
         const editors = new Map<string, EngineEditor>();
 
-        for (const { version, location } of await this.unrealInstalls()) {
+        for (const {version, location} of await this.unrealInstalls()) {
             // Unreal 4 shipped as UE4Editor, Unreal 5 as UnrealEditor.
             const names = version.startsWith("4.") ? ["UE4Editor", "UnrealEditor"] : ["UnrealEditor", "UE4Editor"];
             const candidates = names.map((name) =>

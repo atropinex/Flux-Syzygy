@@ -1,7 +1,7 @@
-import type { Settings, ShortcutResult } from "../../../common/CommonInterface";
-import type { PanelOption, WindowStyle } from "../../../common/projects/SyzygyContract";
-import { exclusive } from "../../../common/utils/ExclusiveHelper";
-import { createStore, useStore } from "../store/SyzygyStore.Controller";
+import type {Settings, ShortcutResult} from "../../../common/CommonInterface";
+import type {PanelOption, WindowStyle} from "../../../common/projects/SyzygyContract";
+import {exclusive} from "../../../common/utils/ExclusiveHelper";
+import {createStore, useStore} from "../store/SyzygyStore.Controller";
 
 export const settingsStore = createStore<Settings>({
     themeId: "midnight",
@@ -31,19 +31,19 @@ export const isSettingsOpen = () => drawerStore.get();
 /** Asks the main process to use a new shortcut. It refuses one that is invalid or already taken. */
 export async function changeShortcut(accelerator: string): Promise<ShortcutResult> {
     const result = await window.api.setShortcut(accelerator);
-    settingsStore.set((settings) => ({ ...settings, shortcut: result.shortcut }));
+    settingsStore.set((settings) => ({...settings, shortcut: result.shortcut}));
     return result;
 }
 
 export async function changePanelOption(option: PanelOption, value: boolean): Promise<void> {
-    settingsStore.set((settings) => ({ ...settings, [option]: value }));
+    settingsStore.set((settings) => ({...settings, [option]: value}));
     await window.api.setPanelOption(option, value);
 }
 
 /** The window is rebuilt, so the page that asked is replaced by a new one. */
 export const changeWindowStyle = exclusive(async (style: WindowStyle): Promise<void> => {
     if (settingsStore.get().windowStyle === style) return;
-    settingsStore.set((settings) => ({ ...settings, windowStyle: style }));
+    settingsStore.set((settings) => ({...settings, windowStyle: style}));
     await window.api.setWindowStyle(style);
 });
 

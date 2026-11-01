@@ -1,8 +1,8 @@
-import { randomUUID } from "crypto";
-import { basename } from "path";
-import type { CustomIde, EngineEditor, IdeOption } from "../CommonInterface";
-import type { IdeId } from "../projects/SyzygyContract";
-import { SettingsModel } from "./SettingsModel";
+import {randomUUID} from "crypto";
+import {basename} from "path";
+import type {CustomIde, EngineEditor, IdeOption} from "../CommonInterface";
+import type {IdeId} from "../projects/SyzygyContract";
+import {SettingsModel} from "./SettingsModel";
 
 /** "C:\Tools\Fleet\fleet.exe" -> "fleet", "/Applications/Zed.app" -> "Zed" */
 export function labelFromPath(filePath: string): string {
@@ -12,7 +12,8 @@ export function labelFromPath(filePath: string): string {
 
 /** The code editors and IDEs the user added. Nothing is built in. */
 export class IdeModel {
-    constructor(private readonly settings: SettingsModel) {}
+    constructor(private readonly settings: SettingsModel) {
+    }
 
     async list(): Promise<CustomIde[]> {
         return (await this.settings.read()).customIdes;
@@ -28,14 +29,14 @@ export class IdeModel {
                 result.ide = existing;
                 return settings;
             }
-            result.ide = { id: `custom-${randomUUID()}`, label: labelFromPath(path), path };
-            return { ...settings, customIdes: [...settings.customIdes, result.ide] };
+            result.ide = {id: `custom-${randomUUID()}`, label: labelFromPath(path), path};
+            return {...settings, customIdes: [...settings.customIdes, result.ide]};
         });
         return result.ide!;
     }
 
     rename(id: IdeId, label: string): Promise<void> {
-        return this.change((ides) => ides.map((ide) => (ide.id === id ? { ...ide, label } : ide)));
+        return this.change((ides) => ides.map((ide) => (ide.id === id ? {...ide, label} : ide)));
     }
 
     remove(id: IdeId): Promise<void> {
@@ -47,15 +48,20 @@ export class IdeModel {
         const engines = editors.map((editor) => ({
             id: editor.id, label: editor.label, custom: false, detail: editor.executable, engine: editor.engine
         }));
-        const custom = (await this.list()).map((ide) => ({ id: ide.id, label: ide.label, custom: true, detail: ide.path }));
+        const custom = (await this.list()).map((ide) => ({
+            id: ide.id,
+            label: ide.label,
+            custom: true,
+            detail: ide.path
+        }));
         return [...engines, ...custom];
     }
 
     toOption(ide: CustomIde): IdeOption {
-        return { id: ide.id, label: ide.label, custom: true, detail: ide.path };
+        return {id: ide.id, label: ide.label, custom: true, detail: ide.path};
     }
 
     private change(change: (ides: CustomIde[]) => CustomIde[]): Promise<void> {
-        return this.settings.update((settings) => ({ ...settings, customIdes: change(settings.customIdes) }));
+        return this.settings.update((settings) => ({...settings, customIdes: change(settings.customIdes)}));
     }
 }

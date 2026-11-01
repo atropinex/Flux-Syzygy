@@ -1,10 +1,16 @@
-import { app, BrowserWindow, nativeImage, screen, type Display } from "electron";
-import { join } from "path";
-import { TRAY_ICON } from "../../icons/TrayIcon";
-import type { PanelEvent, PanelSide, WindowStyle } from "../SyzygyContract";
-import { PANEL_CLOSE_TIMEOUT_MS, PANEL_WINDOW_WIDTH, REGULAR_WINDOW, TOGGLE_COOLDOWN_MS, WINDOW_BACKGROUND } from "../SyzygyConfig";
-import { SyzygyIPC } from "../SyzygyConnection";
-import { SyzygyKeybindController } from "./SyzygyKeybindController";
+import {app, BrowserWindow, nativeImage, screen, type Display} from "electron";
+import {join} from "path";
+import {TRAY_ICON} from "../../icons/TrayIcon";
+import type {PanelEvent, PanelSide, WindowStyle} from "../SyzygyContract";
+import {
+    PANEL_CLOSE_TIMEOUT_MS,
+    PANEL_WINDOW_WIDTH,
+    REGULAR_WINDOW,
+    TOGGLE_COOLDOWN_MS,
+    WINDOW_BACKGROUND
+} from "../SyzygyConfig";
+import {SyzygyIPC} from "../SyzygyConnection";
+import {SyzygyKeybindController} from "./SyzygyKeybindController";
 
 export interface PanelOptions {
     style: WindowStyle;
@@ -28,10 +34,11 @@ export class SyzygyPanelController {
     private hideTimer: NodeJS.Timeout | undefined;
     private lastToggle = 0;
 
-    constructor(private options: PanelOptions) {}
+    constructor(private options: PanelOptions) {
+    }
 
     setOptions(changes: Partial<PanelOptions>): void {
-        this.options = { ...this.options, ...changes };
+        this.options = {...this.options, ...changes};
     }
 
     // === Window === //
@@ -49,7 +56,7 @@ export class SyzygyPanelController {
                     resizable: false, minimizable: false, maximizable: false, fullscreenable: false,
                     skipTaskbar: true, alwaysOnTop: true, backgroundColor: "#00000000"
                 }
-                : { ...REGULAR_WINDOW, backgroundColor: WINDOW_BACKGROUND, autoHideMenuBar: true }),
+                : {...REGULAR_WINDOW, backgroundColor: WINDOW_BACKGROUND, autoHideMenuBar: true}),
             show: false,
             title: "Flux Syzygy",
             icon: nativeImage.createFromDataURL(TRAY_ICON),
@@ -61,7 +68,7 @@ export class SyzygyPanelController {
         });
 
         if (isPanel && process.platform === "darwin") {
-            window.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
+            window.setVisibleOnAllWorkspaces(true, {visibleOnFullScreen: true});
         }
 
         window.on("blur", () => {
@@ -198,9 +205,9 @@ export class SyzygyPanelController {
 
     /** Pins the window to the chosen edge of a display, spanning its usable height (above the taskbar). */
     private place(display: Display): void {
-        const { x, y, width, height } = display.workArea;
+        const {x, y, width, height} = display.workArea;
         const left = this.options.side === "right" ? x + width - PANEL_WINDOW_WIDTH : x;
-        this.window?.setBounds({ x: left, y, width: PANEL_WINDOW_WIDTH, height });
+        this.window?.setBounds({x: left, y, width: PANEL_WINDOW_WIDTH, height});
     }
 
     private finishHide(): void {

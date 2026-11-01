@@ -1,18 +1,18 @@
-import { app } from "electron";
-import { SyzygyEditorController } from "../common/projects/controller/SyzygyEditorController";
-import { SyzygyGroupController } from "../common/projects/controller/SyzygyGroupController";
-import { SyzygyPanelController } from "../common/projects/controller/SyzygyPanelController";
-import { SyzygyProjectController } from "../common/projects/controller/SyzygyProjectController";
-import { SyzygySettingsController } from "../common/projects/controller/SyzygySettingsController";
-import { SyzygyTrayController } from "../common/projects/controller/SyzygyTrayController";
-import { EngineModel } from "../common/models/EngineModel";
-import { GroupModel } from "../common/models/GroupModel";
-import { IdeModel } from "../common/models/IdeModel";
-import { LaunchModel } from "../common/models/LaunchModel";
-import { ProjectModel } from "../common/models/ProjectModel";
-import { ScannerModel } from "../common/models/ScannerModel";
-import { SettingsModel } from "../common/models/SettingsModel";
-import { ThemeModel } from "../common/models/ThemeModel";
+import {app} from "electron";
+import {SyzygyEditorController} from "../common/projects/controller/SyzygyEditorController";
+import {SyzygyGroupController} from "../common/projects/controller/SyzygyGroupController";
+import {SyzygyPanelController} from "../common/projects/controller/SyzygyPanelController";
+import {SyzygyProjectController} from "../common/projects/controller/SyzygyProjectController";
+import {SyzygySettingsController} from "../common/projects/controller/SyzygySettingsController";
+import {SyzygyTrayController} from "../common/projects/controller/SyzygyTrayController";
+import {EngineModel} from "../common/models/EngineModel";
+import {GroupModel} from "../common/models/GroupModel";
+import {IdeModel} from "../common/models/IdeModel";
+import {LaunchModel} from "../common/models/LaunchModel";
+import {ProjectModel} from "../common/models/ProjectModel";
+import {ScannerModel} from "../common/models/ScannerModel";
+import {SettingsModel} from "../common/models/SettingsModel";
+import {ThemeModel} from "../common/models/ThemeModel";
 
 // Only one copy may run, otherwise two panels would fight over the keybind.
 if (!app.requestSingleInstanceLock()) {
@@ -32,8 +32,8 @@ if (!app.requestSingleInstanceLock()) {
         const launcher = new LaunchModel(ides, engines, scanner);
 
         // Controllers: the window, and the answers to the page's requests.
-        const { windowStyle, panelSide, hideOnBlur, shortcut } = await settings.read();
-        const panel = new SyzygyPanelController({ style: windowStyle, side: panelSide, hideOnBlur });
+        const {windowStyle, panelSide, hideOnBlur, shortcut} = await settings.read();
+        const panel = new SyzygyPanelController({style: windowStyle, side: panelSide, hideOnBlur});
 
         new SyzygyProjectController(panel, projects, scanner, engines, launcher).register();
         new SyzygyGroupController(groups, projects).register();

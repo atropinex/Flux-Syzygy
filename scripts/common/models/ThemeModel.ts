@@ -1,10 +1,10 @@
-import { app } from "electron";
-import { promises as fs } from "fs";
-import { join, basename, extname } from "path";
-import { parse } from "yaml";
-import type { Theme, ThemeColors, ThemeList } from "../CommonInterface";
-import { THEME_COLORS } from "../projects/SyzygyContract";
-import { DEFAULT_THEMES } from "./DefaultThemeModel";
+import {app} from "electron";
+import {promises as fs} from "fs";
+import {join, basename, extname} from "path";
+import {parse} from "yaml";
+import type {Theme, ThemeColors, ThemeList} from "../CommonInterface";
+import {THEME_COLORS} from "../projects/SyzygyContract";
+import {DEFAULT_THEMES} from "./DefaultThemeModel";
 
 /** Used for any value a theme file leaves out or gets wrong. Matches the Midnight theme. */
 const FALLBACK_COLORS: ThemeColors = {
@@ -42,12 +42,12 @@ export class ThemeModel {
             const theme = this.toTheme(file, source, problems);
             if (theme) themes.push(theme);
         }
-        return { themes, problems, folder: this.folder };
+        return {themes, problems, folder: this.folder};
     }
 
     /** The first time the app runs the folder is filled with the built-in themes. After that the files belong to the user. */
     private async ensureDefaults(): Promise<void> {
-        await fs.mkdir(this.folder, { recursive: true });
+        await fs.mkdir(this.folder, {recursive: true});
         if ((await fs.readdir(this.folder)).some(isYaml)) return;
 
         for (const [file, source] of Object.entries(DEFAULT_THEMES)) {

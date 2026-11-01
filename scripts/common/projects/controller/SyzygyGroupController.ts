@@ -1,11 +1,12 @@
-import { ipcMain } from "electron";
-import { GroupModel } from "../../models/GroupModel";
-import { ProjectModel } from "../../models/ProjectModel";
-import { SyzygyIPC } from "../SyzygyConnection";
+import {ipcMain} from "electron";
+import {GroupModel} from "../../models/GroupModel";
+import {ProjectModel} from "../../models/ProjectModel";
+import {SyzygyIPC} from "../SyzygyConnection";
 
 /** Answers the page's requests about groups. */
 export class SyzygyGroupController {
-    constructor(private readonly groups: GroupModel, private readonly projects: ProjectModel) {}
+    constructor(private readonly groups: GroupModel, private readonly projects: ProjectModel) {
+    }
 
     register(): void {
         ipcMain.handle(SyzygyIPC.listGroups, () => this.groups.list());

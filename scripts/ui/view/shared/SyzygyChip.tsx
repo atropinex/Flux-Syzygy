@@ -7,10 +7,10 @@ interface Props {
     label: string;
 }
 
-export default function SyzygyChip({ symbol, color, label }: Props) {
+export default function SyzygyChip({symbol, color, label}: Props) {
     return (
         <span className={controls.chip}>
-            <SyzygyBadge symbol={symbol} color={color} />
+            <SyzygyBadge symbol={symbol} color={color}/>
             {label}
         </span>
     );

@@ -1,7 +1,7 @@
-import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
-import { animateRemoval, setShown } from "../../../controller/animation/SyzygyAnimation.Controller";
-import { isEntranceEnabled } from "../../../controller/list/SyzygyList.Controller";
-import { cx } from "../../../../common/utils/ClassHelper";
+import {useEffect, useLayoutEffect, useRef, useState, type ReactNode} from "react";
+import {animateRemoval, setShown} from "../../../controller/animation/SyzygyAnimation.Controller";
+import {isEntranceEnabled} from "../../../controller/list/SyzygyList.Controller";
+import {cx} from "../../../../common/utils/ClassHelper";
 import styles from "./SyzygyRow.module.css";
 
 interface Props {
@@ -21,7 +21,7 @@ interface Props {
  * shown or hidden, the entrance, and sliding out. The `hidden` attribute is set by hand, never by
  * React, so React can't undo it mid-animation.
  */
-export default function SyzygyRow({ rowType, rowId, rowKey, order, visible, leaving = false, isGroup = false, onLeft, children }: Props) {
+export default function SyzygyRow({rowType, rowId, rowKey, order, visible, leaving = false, isGroup = false, onLeft, children}: Props) {
     const ref = useRef<HTMLDivElement>(null);
     const mounted = useRef(false);
     const [entering, setEntering] = useState(isEntranceEnabled);

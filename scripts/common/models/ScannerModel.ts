@@ -1,8 +1,8 @@
-import { promises as fs } from "fs";
-import { extname, join } from "path";
-import type { GitInfo, LanguageShare, ScanResult } from "../CommonInterface";
-import { EXTENSION_TO_LANGUAGE, IGNORED_DIRS, KIND_MARKERS, MAX_FILES_SCANNED } from "../projects/SyzygyConfig";
-import type { GitProvider, ProjectKind } from "../projects/SyzygyContract";
+import {promises as fs} from "fs";
+import {extname, join} from "path";
+import type {GitInfo, LanguageShare, ScanResult} from "../CommonInterface";
+import {EXTENSION_TO_LANGUAGE, IGNORED_DIRS, KIND_MARKERS, MAX_FILES_SCANNED} from "../projects/SyzygyConfig";
+import type {GitProvider, ProjectKind} from "../projects/SyzygyContract";
 
 function providerFromUrl(url: string): GitProvider {
     if (url.includes("github.com")) return "github";
@@ -15,10 +15,10 @@ function providerFromUrl(url: string): GitProvider {
 export class ScannerModel {
     async scan(root: string): Promise<ScanResult> {
         const entries = await fs.readdir(root).catch(() => null);
-        if (!entries) return { kind: "unknown", git: null, languages: [], exists: false };
+        if (!entries) return {kind: "unknown", git: null, languages: [], exists: false};
 
         const [git, languages] = await Promise.all([this.detectGit(root), this.detectLanguages(root)]);
-        return { kind: this.detectKind(entries), git, languages, exists: true };
+        return {kind: this.detectKind(entries), git, languages, exists: true};
     }
 
     /** `entries` are the names of the files and folders in the project's root. */
@@ -34,7 +34,7 @@ export class ScannerModel {
         const gitPath = join(root, ".git");
         try {
             const stat = await fs.stat(gitPath);
-            if (!stat.isDirectory()) return { provider: "local", remoteUrl: null, branch: null }; // worktree or submodule
+            if (!stat.isDirectory()) return {provider: "local", remoteUrl: null, branch: null}; // worktree or submodule
         } catch {
             return null;
         }
@@ -45,7 +45,7 @@ export class ScannerModel {
         const remoteUrl = config.match(/^\s*url\s*=\s*(.+)$/m)?.[1].trim() ?? null;
         const branch = head.match(/^ref: refs\/heads\/(.+)$/m)?.[1].trim() ?? null;
 
-        return { provider: remoteUrl ? providerFromUrl(remoteUrl) : "local", remoteUrl, branch };
+        return {provider: remoteUrl ? providerFromUrl(remoteUrl) : "local", remoteUrl, branch};
     }
 
     /** The five most used languages, by file size. */
@@ -56,7 +56,7 @@ export class ScannerModel {
 
         while (pending.length > 0 && filesSeen < MAX_FILES_SCANNED) {
             const dir = pending.pop()!;
-            const entries = await fs.readdir(dir, { withFileTypes: true }).catch(() => []);
+            const entries = await fs.readdir(dir, {withFileTypes: true}).catch(() => []);
 
             for (const entry of entries) {
                 const fullPath = join(dir, entry.name);
@@ -69,7 +69,7 @@ export class ScannerModel {
                 if (!language) continue;
 
                 filesSeen++;
-                const { size } = await fs.stat(fullPath).catch(() => ({ size: 0 }));
+                const {size} = await fs.stat(fullPath).catch(() => ({size: 0}));
                 bytesPerLanguage.set(language, (bytesPerLanguage.get(language) ?? 0) + size);
             }
         }
@@ -78,7 +78,7 @@ export class ScannerModel {
         if (total === 0) return [];
 
         return [...bytesPerLanguage.entries()]
-            .map(([name, bytes]) => ({ name, percent: Math.round((bytes / total) * 1000) / 10 }))
+            .map(([name, bytes]) => ({name, percent: Math.round((bytes / total) * 1000) / 10}))
             .sort((a, b) => b.percent - a.percent)
             .slice(0, 5);
     }

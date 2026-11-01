@@ -1,4 +1,4 @@
-import { useSyncExternalStore } from "react";
+import {useSyncExternalStore} from "react";
 
 /** A tiny observable value. Views read it with useStore(), controllers change it with set(). */
 export interface Store<T> {
@@ -21,7 +21,9 @@ export function createStore<T>(initial: T): Store<T> {
         },
         subscribe(listener) {
             listeners.add(listener);
-            return () => { listeners.delete(listener); };
+            return () => {
+                listeners.delete(listener);
+            };
         }
     };
 }

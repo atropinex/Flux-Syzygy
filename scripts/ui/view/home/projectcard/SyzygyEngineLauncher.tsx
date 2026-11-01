@@ -1,13 +1,13 @@
-import { useState } from "react";
-import type { Project } from "../../../../common/CommonInterface";
-import { KIND_STYLES } from "../../../../common/projects/SyzygyBadgeStyle";
-import { getIdeLabel, useEditors } from "../../../controller/editor/SyzygyEditor.Controller";
-import { chooseEngine, openProject } from "../../../controller/project/SyzygyProject.Controller";
+import {useState} from "react";
+import type {Project} from "../../../../common/CommonInterface";
+import {KIND_STYLES} from "../../../../common/projects/SyzygyBadgeStyle";
+import {getIdeLabel, useEditors} from "../../../controller/editor/SyzygyEditor.Controller";
+import {chooseEngine, openProject} from "../../../controller/project/SyzygyProject.Controller";
 import SyzygyLauncher from "./SyzygyLauncher";
 
 /** Opens the project in its game engine's editor: the one picked here, or the exact version it needs. */
-export default function SyzygyEngineLauncher({ project }: { project: Project }) {
-    const { ides } = useEditors();
+export default function SyzygyEngineLauncher({project}: { project: Project }) {
+    const {ides} = useEditors();
     const [pending, setPending] = useState(false);
 
     const engineName = KIND_STYLES[project.kind].label;

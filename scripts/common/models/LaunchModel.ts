@@ -1,11 +1,11 @@
-import { spawn, type ChildProcess } from "child_process";
-import { promises as fs } from "fs";
-import { basename, join } from "path";
-import type { EngineEditor, LaunchPlan, OpenRequest } from "../CommonInterface";
-import { ENGINE_NAMES, isEngineKind, type OpenTarget } from "../projects/SyzygyContract";
-import { EngineModel } from "./EngineModel";
-import { IdeModel } from "./IdeModel";
-import { ScannerModel } from "./ScannerModel";
+import {spawn, type ChildProcess} from "child_process";
+import {promises as fs} from "fs";
+import {basename, join} from "path";
+import type {EngineEditor, LaunchPlan, OpenRequest} from "../CommonInterface";
+import {ENGINE_NAMES, isEngineKind, type OpenTarget} from "../projects/SyzygyContract";
+import {EngineModel} from "./EngineModel";
+import {IdeModel} from "./IdeModel";
+import {ScannerModel} from "./ScannerModel";
 
 /** Works out what to start for a project (its engine editor or an IDE) and starts it. */
 export class LaunchModel {
@@ -13,7 +13,8 @@ export class LaunchModel {
         private readonly ides: IdeModel,
         private readonly engines: EngineModel,
         private readonly scanner: ScannerModel
-    ) {}
+    ) {
+    }
 
     /** Opens the project and returns the name of what it was opened with. */
     async open(request: OpenRequest, target: OpenTarget): Promise<string> {
@@ -39,7 +40,11 @@ export class LaunchModel {
                     : `No ${ENGINE_NAMES[kind]} editor chosen yet. Choose one for this project.`);
             }
         }
-        return { label: editor.label, command: editor.executable, args: await this.engines.launchArgs(editor.engine, request.path) };
+        return {
+            label: editor.label,
+            command: editor.executable,
+            args: await this.engines.launchArgs(editor.engine, request.path)
+        };
     }
 
     /** A code editor or IDE the user added. */
@@ -50,13 +55,13 @@ export class LaunchModel {
 
         // macOS applications are folders ending in .app and must be started through `open`.
         if (process.platform === "darwin" && ide.path.endsWith(".app")) {
-            return { label: ide.label, command: "open", args: ["-a", ide.path, request.path] };
+            return {label: ide.label, command: "open", args: ["-a", ide.path, request.path]};
         }
 
         // Visual Studio opens a solution file rather than a folder.
         const entries = await fs.readdir(request.path).catch(() => [] as string[]);
         const solution = /devenv/i.test(basename(ide.path)) ? entries.find((entry) => entry.endsWith(".sln")) : undefined;
-        return { label: ide.label, command: ide.path, args: [solution ? join(request.path, solution) : request.path] };
+        return {label: ide.label, command: ide.path, args: [solution ? join(request.path, solution) : request.path]};
     }
 
     /**
@@ -68,18 +73,22 @@ export class LaunchModel {
      * window hidden, so the editor would run but never appear.
      */
     private spawnDetached(command: string, args: string[]): ChildProcess {
-        const options = { detached: true, stdio: "ignore" } as const;
+        const options = {detached: true, stdio: "ignore"} as const;
 
         // .cmd and .bat files can only run through cmd.exe. `start /B` hands the real program over to
         // Windows, so nothing is left waiting on a console. Only that console is hidden.
         if (process.platform === "win32" && /\.(cmd|bat)$/i.test(command)) {
             const line = ["start", '""', "/B", ...[command, ...args].map((part) => `"${part}"`)].join(" ");
-            return spawn("cmd.exe", ["/d", "/s", "/c", `"${line}"`], { ...options, windowsHide: true, windowsVerbatimArguments: true });
+            return spawn("cmd.exe", ["/d", "/s", "/c", `"${line}"`], {
+                ...options,
+                windowsHide: true,
+                windowsVerbatimArguments: true
+            });
         }
         return spawn(command, args, options);
     }
 
-    private start({ label, command, args }: LaunchPlan): Promise<void> {
+    private start({label, command, args}: LaunchPlan): Promise<void> {
         return new Promise((resolve, reject) => {
             const child = this.spawnDetached(command, args);
             const failure = (detail: string) =>
@@ -89,7 +98,10 @@ export class LaunchModel {
             child.once("exit", (code) => code && reject(failure(`exit code ${code}`))); // e.g. cmd.exe reporting a missing program
             child.once("spawn", () => {
                 // Wait briefly so an immediate failure can still be reported.
-                setTimeout(() => { child.unref(); resolve(); }, 350);
+                setTimeout(() => {
+                    child.unref();
+                    resolve();
+                }, 350);
             });
         });
     }

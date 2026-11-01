@@ -1,4 +1,4 @@
-import { createStore, useStore } from "../store/SyzygyStore.Controller";
+import {createStore, useStore} from "../store/SyzygyStore.Controller";
 
 interface ToastState {
     message: string;
@@ -6,14 +6,14 @@ interface ToastState {
     visible: boolean;
 }
 
-const toastStore = createStore<ToastState>({ message: "", isError: false, visible: false });
+const toastStore = createStore<ToastState>({message: "", isError: false, visible: false});
 let hideTimer: number | undefined;
 
 /** A short message at the bottom of the panel. Errors stay a little longer. */
 export function showToast(message: string, isError = false): void {
     window.clearTimeout(hideTimer);
-    toastStore.set({ message, isError, visible: true });
-    hideTimer = window.setTimeout(() => toastStore.set((state) => ({ ...state, visible: false })), isError ? 6000 : 3000);
+    toastStore.set({message, isError, visible: true});
+    hideTimer = window.setTimeout(() => toastStore.set((state) => ({...state, visible: false})), isError ? 6000 : 3000);
 }
 
 export const useToast = () => useStore(toastStore);
