@@ -147,11 +147,5 @@ vite.config.ts.timestamp-*
 
 # Turbo Repo
 .turbo
-/.idea/.gitignore
-/.idea/encodings.xml
-/.idea/Flux-Syzygy.iml
-/.idea/modules.xml
-/.idea/vcs.xml
-/.idea/claudeCodeTabState.xml
-/.idea/.name
+/.idea
 /release

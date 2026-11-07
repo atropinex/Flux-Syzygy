@@ -1,4 +1,4 @@
-﻿# Packaging. Run `npm run dist` (or dist:win / dist:mac / dist:linux). Installers land in ./release
+# Packaging. Run `npm run dist` (or dist:win / dist:mac / dist:linux). Installers land in ./release
 appId: com.flux.syzygy
 productName: Flux Syzygy
 copyright: Flux Syzygy

@@ -1,5 +1,5 @@
 import type {
-    GitProvider, IdeId, OpenTarget, PanelEvent, PanelOption, PanelSide, ProjectKind, ThemeColor, WindowStyle
+    ExtensionTone, GitProvider, IdeId, OpenTarget, PanelEvent, PanelOption, PanelSide, ProjectKind, ThemeColor, WindowStyle
 } from "./projects/SyzygyContract";
 
 // === The API the page can call (see scripts/preload/preloadindex.ts) === //
@@ -40,6 +40,16 @@ export interface ElectronApi {
     setWindowStyle: (style: WindowStyle) => Promise<void>;
     setPanelSide: (side: PanelSide) => Promise<void>;
     setPanelOption: (option: PanelOption, value: boolean) => Promise<void>;
+
+    // Extensions
+    listExtensions: () => Promise<ExtensionInfo[]>;
+    setExtensionEnabled: (id: string, enabled: boolean) => Promise<ExtensionInfo[]>;
+    reloadExtensions: () => Promise<ExtensionInfo[]>;
+    openExtensionsFolder: () => Promise<void>;
+    getExtensionContributions: () => Promise<ExtensionContributions>;
+    runExtensionCommand: (extensionId: string, command: string, args?: unknown) => Promise<void>;
+    onExtensionsChanged: (callback: (contributions: ExtensionContributions) => void) => () => void;
+    onExtensionNotice: (callback: (notice: ExtensionNotice) => void) => () => void;
 
     // The panel
     panelReady: () => Promise<void>;                           // the page has loaded: show it
@@ -163,6 +173,7 @@ export interface CustomIde {
 export interface StoredSettings extends Settings {
     customIdes: CustomIde[];
     groups: Group[];
+    disabledExtensions: string[]; // ids of extensions the user switched off
 }
 
 // === Used inside the main process === //
@@ -193,4 +204,145 @@ export interface LaunchPlan {
     label: string;
     command: string;
     args: string[];
+}
+
+// === Extensions === //
+
+/** What an extension's extension.json says about it. */
+export interface ExtensionManifest {
+    id: string;          // lowercase letters, digits and dashes
+    name: string;
+    version: string;
+    description: string;
+    author?: string;
+    main: string;        // the script that runs in the main process, relative to the extension's folder
+}
+
+export interface ExtensionInfo {
+    id: string;
+    name: string;
+    version: string;
+    description: string;
+    author: string;
+    folder: string;
+    enabled: boolean;
+    status: "active" | "disabled" | "error";
+    error: string | null;
+}
+
+/** A small pill an extension shows on a project's card. */
+export interface ExtensionBadge {
+    extensionId: string;
+    id: string;
+    text: string;
+    tone: ExtensionTone;
+    tooltip?: string;
+    command?: string;    // run when the badge is clicked
+    args?: unknown;
+}
+
+/** An extra item an extension adds to a project's right-click menu. */
+export interface ExtensionMenuItem {
+    extensionId: string;
+    id: string;
+    label: string;
+    command: string;
+    args?: unknown;
+    hint?: string;
+    danger?: boolean;
+}
+
+export interface ExtensionProjectContribution {
+    badges: ExtensionBadge[];
+    menu: ExtensionMenuItem[];
+}
+
+/** Everything extensions add to the app, by project id. */
+export type ExtensionContributions = Record<string, ExtensionProjectContribution>;
+
+/** A message from an extension for the toast. */
+export interface ExtensionNotice {
+    message: string;
+    isError: boolean;
+}
+
+// === What an extension can use (see docs/EXTENSIONS.md) === //
+
+export interface Disposable {
+    dispose: () => void;
+}
+
+/** A project, as extensions see it. */
+export interface ExtensionProjectInfo {
+    id: string;
+    name: string;
+    path: string;
+    kind: ProjectKind;
+}
+
+/** What an extension passes to projects.contribute(). Anything invalid is dropped. */
+export interface ExtensionContribution {
+    badges?: Array<Omit<ExtensionBadge, "extensionId">>;
+    menu?: Array<Omit<ExtensionMenuItem, "extensionId">>;
+}
+
+export interface ExtensionWindowOptions {
+    id?: string;        // opening the same id again focuses the existing window
+    title: string;
+    page: string;       // an .html file inside the extension's folder
+    width?: number;
+    height?: number;
+    data?: unknown;     // handed to the page: window.extension.getInfo().data
+}
+
+export interface ExtensionContext {
+    readonly id: string;
+    readonly version: string;
+    readonly folder: string;
+    log: (...args: unknown[]) => void;
+    notify: (message: string, isError?: boolean) => void;
+    openExternal: (url: string) => Promise<void>; // https links only
+    projects: {
+        list: () => Promise<ExtensionProjectInfo[]>;
+        onDidChange: (listener: () => void) => Disposable;
+        contribute: (projectId: string, contribution: ExtensionContribution) => void;
+        clear: (projectId: string) => void;
+    };
+    commands: {
+        register: (name: string, handler: (args?: unknown) => unknown) => Disposable;
+    };
+    ipc: {
+        handle: (channel: string, handler: (payload: unknown, from: { windowId: string }) => unknown) => Disposable;
+    };
+    windows: {
+        open: (options: ExtensionWindowOptions) => string;
+        send: (windowId: string, channel: string, payload?: unknown) => void;
+        close: (windowId: string) => void;
+        onDidClose: (listener: (windowId: string) => void) => Disposable;
+    };
+    storage: {
+        get: <T = unknown>(key: string, fallback?: T) => Promise<T | undefined>;
+        set: (key: string, value: unknown) => Promise<void>;
+    };
+}
+
+/** What an extension's main script exports. */
+export interface ExtensionModule {
+    activate: (context: ExtensionContext) => unknown;
+    deactivate?: () => unknown;
+}
+
+/** What an extension's window sees as `window.extension` (see scripts/preload/preloadextension.ts). */
+export interface ExtensionWindowInfo {
+    extensionId: string;
+    windowId: string;
+    data: unknown;
+    theme: { mode: "dark" | "light"; colors: ThemeColors }; // the app's current theme, so windows can match it
+}
+
+export interface ExtensionWindowApi {
+    getInfo: () => Promise<ExtensionWindowInfo | null>;
+    invoke: (channel: string, payload?: unknown) => Promise<unknown>;
+    on: (channel: string, callback: (payload: unknown) => void) => () => void;
+    close: () => Promise<void>;
 }
